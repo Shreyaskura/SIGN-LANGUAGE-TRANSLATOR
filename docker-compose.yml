@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # 1. FastAPI Backend API Service
+  web_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sign_ai_fastapi
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://dbs_user:dbs_password@postgres_db:5432/sign_language_db
+      - MONGO_URI=mongodb://mongo_db:27017
+    depends_on:
+      - postgres_db
+      - mongo_db
+    restart: always
+
+  # 2. Relational Database Service (PostgreSQL)
+  postgres_db:
+    image: postgres:15-alpine
+    container_name: sign_ai_postgres
+    environment:
+      POSTGRES_USER: dbs_user
+      POSTGRES_PASSWORD: dbs_password
+      POSTGRES_DB: sign_language_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./dbs_queries.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+
+  # 3. NoSQL Document Database Service (MongoDB)
+  mongo_db:
+    image: mongo:7.0
+    container_name: sign_ai_mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: always
+
+  # 4. Database Web GUI Management (pgAdmin)
+  pgadmin:
+    image: dpage/pgadmin4:7
+    container_name: sign_ai_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@dbs.com
+      PGADMIN_DEFAULT_PASSWORD: adminpassword
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres_db
+    restart: always
+
+volumes:
+  postgres_data:
+  mongo_data:

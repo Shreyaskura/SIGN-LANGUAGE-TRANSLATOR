@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Catalog | Sign Language Translator (DBS & DBE Project)</title>
+    <meta name="description" content="Visual Sign Language Catalog displaying all supported gestures including Help, Greetings, Emergency, Expressions, Alphabets, and Numbers with interactive audio testing.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation Header -->
+        <header class="navbar">
+            <div class="nav-brand">
+                <div class="brand-logo">
+                    <i class="fa-solid fa-hands-asl-interpreting"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>Sign Language Catalog <span class="badge-dbs">DBS & DBE Project</span></h1>
+                    <p class="tagline">Explore Supported Gestures & Hand Positioning Guides</p>
+                </div>
+            </div>
+            
+            <nav class="nav-actions">
+                <a href="index.html" class="btn btn-primary">
+                    <i class="fa-solid fa-camera"></i> Live Camera Translator
+                </a>
+            </nav>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="signs-hero glass-panel">
+            <div class="hero-content">
+                <div class="hero-title">
+                    <i class="fa-solid fa-book-open hero-icon"></i>
+                    <div>
+                        <h2>Complete Gesture Reference Catalog</h2>
+                        <p>Browse through all supported American Sign Language (ASL) and emergency gestures. Click <strong>"Listen & Test Speech"</strong> on any sign to hear voice audio.</p>
+                    </div>
+                </div>
+
+                <!-- Filter & Search Controls -->
+                <div class="dictionary-filter-bar">
+                    <div class="search-input-wrapper">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="catalog-search" placeholder="Search signs by name or keyword (e.g. Help, Water, Hello, Please, A, B, 1, 2)...">
+                    </div>
+                    <div class="category-pills" id="catalog-category-pills">
+                        <button class="pill active" data-category="all">All Signs</button>
+                        <button class="pill" data-category="Emergency">Emergency & Help</button>
+                        <button class="pill" data-category="Greetings">Greetings</button>
+                        <button class="pill" data-category="Daily Needs">Daily Needs</button>
+                        <button class="pill" data-category="Expressions">Expressions</button>
+                        <button class="pill" data-category="Common">Common</button>
+                        <button class="pill" data-category="Alphabet">Alphabets</button>
+                        <button class="pill" data-category="Numbers">Numbers</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Signs Grid Catalog -->
+        <main class="signs-catalog-grid" id="full-catalog-grid">
+            <!-- Populated Dynamically by JS -->
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Built for <strong>Database Systems (DBS) & Database Engineering (DBE)</strong> Project Submission • PostgreSQL, MongoDB, FastAPI & MediaPipe</p>
+        </footer>
+    </div>
+
+    <!-- Modal: Real Human Sign Instructor Demo & Step-by-Step Guide -->
+    <div class="modal-backdrop" id="modal-hand-guide">
+        <div class="modal-content glass-panel modal-lg">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fa-solid fa-person"></i>
+                    <h2 id="guide-modal-title">How to Form Sign: HELP</h2>
+                </div>
+                <button class="btn-close-modal" id="btn-close-hand-guide">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="modal-body guide-modal-body">
+                <div class="guide-grid">
+                    <!-- Left: Real Human Sign Instructor & 21-Keypoint Switcher -->
+                    <div class="guide-diagram-box glass-panel">
+                        <!-- View Mode Tabs -->
+                        <div class="instructor-mode-tabs">
+                            <button type="button" class="instructor-tab-btn active" id="btn-mode-human">
+                                <i class="fa-solid fa-cube"></i> 3D Hand Model
+                            </button>
+                            <button type="button" class="instructor-tab-btn" id="btn-mode-photo">
+                                <i class="fa-solid fa-images"></i> Palm & Back Views
+                            </button>
+                            <button type="button" class="instructor-tab-btn" id="btn-mode-skeleton">
+                                <i class="fa-solid fa-draw-polygon"></i> 21-Keypoints
+                            </button>
+                        </div>
+
+                        <!-- Real Human Instructor Stage -->
+                        <div class="human-stage-wrapper active" id="guide-human-stage">
+                            <!-- Populated dynamically by JS with realistic human animated SVG -->
+                        </div>
+
+                        <!-- Real Photo Hand Model Reference -->
+                        <div class="photo-model-wrapper" id="guide-photo-wrapper">
+                            <div class="photo-model-container">
+                                <div class="photo-hand-card">
+                                    <img src="assets/hand_dorsal.png" alt="Hand Model Dorsal View" />
+                                    <span class="photo-hand-label"><i class="fa-solid fa-hand"></i> Back View</span>
+                                </div>
+                                <div class="photo-hand-card">
+                                    <img src="assets/hand_palmar.png" alt="Hand Model Palmar View" />
+                                    <span class="photo-hand-label"><i class="fa-regular fa-hand"></i> Palm View</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 21-Keypoint Landmark Skeleton Canvas -->
+                        <div class="skeleton-visual-wrapper" id="guide-skeleton-wrapper">
+                            <canvas id="guide-skeleton-canvas" width="280" height="280"></canvas>
+                        </div>
+
+                        <!-- Playback Speed & Replay Controls -->
+                        <div class="instructor-playback-controls" id="instructor-controls">
+                            <button type="button" class="control-chip active" id="btn-speed-normal" title="Normal 1.0x Speed">
+                                <i class="fa-solid fa-play"></i> 1.0x
+                            </button>
+                            <button type="button" class="control-chip" id="btn-speed-slow" title="Slow Motion 0.5x Speed for Learning">
+                                <i class="fa-solid fa-gauge-simple"></i> 0.5x Slow-Mo
+                            </button>
+                            <button type="button" class="control-chip btn-replay" id="btn-replay-anim" title="Replay Animation">
+                                <i class="fa-solid fa-arrow-rotate-right"></i> Replay
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Step-by-Step Finger Checklist & Instructions -->
+                    <div class="guide-steps-box">
+                        <div class="finger-checklist-card glass-panel">
+                            <h3><i class="fa-solid fa-list-check"></i> Finger Configuration</h3>
+                            <div class="finger-grid" id="guide-finger-checklist">
+                                <!-- Populated dynamically by JS -->
+                            </div>
+                        </div>
+
+                        <div class="guide-instructions-card glass-panel">
+                            <h3><i class="fa-solid fa-circle-info"></i> Positioning Instructions</h3>
+                            <ol class="steps-list" id="guide-steps-list">
+                                <!-- Populated dynamically by JS -->
+                            </ol>
+                        </div>
+
+                        <div class="guide-modal-actions">
+                            <a href="index.html" class="btn btn-primary" id="btn-guide-try-camera">
+                                <i class="fa-solid fa-camera"></i> Practice in Live Camera
+                            </a>
+                            <button type="button" id="btn-guide-test-speech" class="btn btn-secondary">
+                                <i class="fa-solid fa-volume-high"></i> Listen to Speech
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Three.js 3D WebGL Engine & OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="assets/GLTFLoader.js"></script>
+    <script src="hand3d.js?v=11"></script>
+    <!-- Script to render full catalog page with Real Human Animations -->
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const grid = document.getElementById('full-catalog-grid');
+            const searchInput = document.getElementById('catalog-search');
+            const categoryPills = document.getElementById('catalog-category-pills');
+
+            // Modal elements
+            const modalHandGuide = document.getElementById('modal-hand-guide');
+            const btnCloseHandGuide = document.getElementById('btn-close-hand-guide');
+            const guideModalTitle = document.getElementById('guide-modal-title');
+            const guideHumanStage = document.getElementById('guide-human-stage');
+            const guidePhotoWrapper = document.getElementById('guide-photo-wrapper');
+            const guideSkeletonWrapper = document.getElementById('guide-skeleton-wrapper');
+            const guideSkeletonCanvas = document.getElementById('guide-skeleton-canvas');
+            const guideFingerChecklist = document.getElementById('guide-finger-checklist');
+            const guideStepsList = document.getElementById('guide-steps-list');
+            const btnGuideTestSpeech = document.getElementById('btn-guide-test-speech');
+            const btnModeHuman = document.getElementById('btn-mode-human');
+            const btnModePhoto = document.getElementById('btn-mode-photo');
+            const btnModeSkeleton = document.getElementById('btn-mode-skeleton');
+            const btnSpeedNormal = document.getElementById('btn-speed-normal');
+            const btnSpeedSlow = document.getElementById('btn-speed-slow');
+            const btnReplayAnim = document.getElementById('btn-replay-anim');
+
+            let activeGuideSign = null;
+            let currentSpeed = 'normal';
+
+            function renderInstructorStage(item) {
+                if (!guideHumanStage) return;
+                const speedClass = currentSpeed === 'slow-motion' ? 'slow-motion' : '';
+                const bodyPos = item.bodyPosition || 'Front of Camera';
+                const bodyTag = `<div class="body-placement-indicator"><i class="fa-solid fa-location-dot"></i> ${bodyPos}</div>`;
+                const orientation = window.getHandOrientation ? window.getHandOrientation(item) : { label: 'Front View', view: 'palmar' };
+
+                guideHumanStage.innerHTML = `
+                    ${bodyTag}
+                    <div class="threed-drag-hint">
+                        <i class="fa-solid fa-arrows-spin"></i> 360° Drag
+                    </div>
+                    <div id="hand-3d-viewport" class="hand-3d-viewport"></div>
+                    <div class="threed-camera-pills">
+                        <button type="button" class="threed-cam-btn ${orientation.view === 'palmar' ? 'active' : ''}" id="btn-cam-front" title="Front (Palm) View">
+                            <i class="fa-regular fa-hand"></i> Front
+                        </button>
+                        <button type="button" class="threed-cam-btn ${orientation.view === 'dorsal' ? 'active' : ''}" id="btn-cam-back" title="Back (Dorsal) View">
+                            <i class="fa-solid fa-hand"></i> Back
+                        </button>
+                        <button type="button" class="threed-cam-btn" id="btn-cam-iso" title="3D Perspective Angle">
+                            <i class="fa-solid fa-cube"></i> 3D Angle
+                        </button>
+                    </div>
+                `;
+
+                const viewport = document.getElementById('hand-3d-viewport');
+                if (viewport && window.Hand3D) {
+                    window.Hand3D.init(viewport);
+                    window.Hand3D.displaySign(item, speedClass);
+
+                    const btnCamFront = document.getElementById('btn-cam-front');
+                    const btnCamBack = document.getElementById('btn-cam-back');
+                    const btnCamIso = document.getElementById('btn-cam-iso');
+
+                    const setCamBtnActive = (activeBtn) => {
+                        [btnCamFront, btnCamBack, btnCamIso].forEach(b => { if (b) b.classList.remove('active'); });
+                        if (activeBtn) activeBtn.classList.add('active');
+                    };
+
+                    if (btnCamFront) btnCamFront.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        setCamBtnActive(btnCamFront);
+                        window.Hand3D.setCameraView('front');
+                    });
+
+                    if (btnCamBack) btnCamBack.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        setCamBtnActive(btnCamBack);
+                        window.Hand3D.setCameraView('back');
+                    });
+
+                    if (btnCamIso) btnCamIso.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        setCamBtnActive(btnCamIso);
+                        window.Hand3D.setCameraView('iso');
+                    });
+                } else if (viewport && window.renderRealPhotoHand) {
+                    viewport.innerHTML = window.renderRealPhotoHand(item, false, speedClass);
+                }
+
+                if (guideSkeletonCanvas) {
+                    const ctx = guideSkeletonCanvas.getContext('2d');
+                    ctx.clearRect(0, 0, guideSkeletonCanvas.width, guideSkeletonCanvas.height);
+                    const cx = guideSkeletonCanvas.width / 2;
+                    const cy = guideSkeletonCanvas.height / 2 + 25;
+                    const wrist = { x: cx, y: cy + 70 };
+                    const name = item.name.toUpperCase();
+                    const isThumbUp = name.includes("THUMBS") || name.includes("HELP");
+                    const isIndexUp = !name.includes("ALPHABET A") && !name.includes("YES") && !name.includes("SORRY") && !name.includes("STOP");
+                    const thumbTip = isThumbUp ? { x: cx - 60, y: cy - 40 } : { x: cx - 35, y: cy + 10 };
+                    const indexTip = isIndexUp ? { x: cx - 35, y: cy - 85 } : { x: cx - 25, y: cy + 10 };
+                    const middleTip = { x: cx - 5, y: cy - 90 };
+                    const ringTip = { x: cx + 20, y: cy - 84 };
+                    const pinkyTip = { x: cx + 48, y: cy - 65 };
+
+                    ctx.lineWidth = 3;
+                    function drawBone(start, end, ext) {
+                        ctx.beginPath();
+                        ctx.moveTo(start.x, start.y);
+                        ctx.lineTo(end.x, end.y);
+                        ctx.strokeStyle = ext ? '#16a34a' : '#cbd5e1';
+                        ctx.stroke();
+                    }
+                    drawBone(wrist, thumbTip, isThumbUp);
+                    drawBone(wrist, indexTip, isIndexUp);
+                    drawBone(wrist, middleTip, false);
+                    drawBone(wrist, ringTip, false);
+                    drawBone(wrist, pinkyTip, false);
+                    [wrist, thumbTip, indexTip, middleTip, ringTip, pinkyTip].forEach(pt => {
+                        ctx.beginPath();
+                        ctx.arc(pt.x, pt.y, 6, 0, 2*Math.PI);
+                        ctx.fillStyle = '#2563eb';
+                        ctx.fill();
+                    });
+                }
+            }
+
+            function openCatalogModal(item) {
+                if (!modalHandGuide) return;
+                activeGuideSign = item;
+                if (guideModalTitle) guideModalTitle.textContent = `How to Form Sign: ${item.name}`;
+
+                renderInstructorStage(item);
+
+                const f = item.fingers || { thumb: "Extended", index: "Extended", middle: "Folded", ring: "Folded", pinky: "Extended" };
+                const cleanThumb = (f.thumb || 'Extended').replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim();
+                const cleanIndex = (f.index || 'Extended').replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim();
+                const cleanMiddle = (f.middle || 'Folded').replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim();
+                const cleanRing = (f.ring || 'Folded').replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim();
+                const cleanPinky = (f.pinky || 'Folded').replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim();
+
+                if (guideFingerChecklist) {
+                    guideFingerChecklist.innerHTML = `
+                        <div class="finger-item"><span class="f-name">Thumb:</span> <span class="f-val ${cleanThumb.toLowerCase().includes('folded') ? 'folded' : 'ext'}">${cleanThumb}</span></div>
+                        <div class="finger-item"><span class="f-name">Index:</span> <span class="f-val ${cleanIndex.toLowerCase().includes('folded') ? 'folded' : 'ext'}">${cleanIndex}</span></div>
+                        <div class="finger-item"><span class="f-name">Middle:</span> <span class="f-val ${cleanMiddle.toLowerCase().includes('folded') ? 'folded' : 'ext'}">${cleanMiddle}</span></div>
+                        <div class="finger-item"><span class="f-name">Ring:</span> <span class="f-val ${cleanRing.toLowerCase().includes('folded') ? 'folded' : 'ext'}">${cleanRing}</span></div>
+                        <div class="finger-item"><span class="f-name">Pinky:</span> <span class="f-val ${cleanPinky.toLowerCase().includes('folded') ? 'folded' : 'ext'}">${cleanPinky}</span></div>
+                    `;
+                }
+
+                const steps = item.steps || [
+                    "Position your hand clearly in front of the camera.",
+                    "Form the exact finger configuration shown in the human animation.",
+                    "Hold steady to trigger auto-translation."
+                ];
+                if (guideStepsList) {
+                    guideStepsList.innerHTML = steps.map(st => `<li>${st}</li>`).join('');
+                }
+
+                setInstructorTab('human');
+                modalHandGuide.classList.add('active');
+            }
+
+            if (btnCloseHandGuide && modalHandGuide) {
+                btnCloseHandGuide.addEventListener('click', () => modalHandGuide.classList.remove('active'));
+                modalHandGuide.addEventListener('click', (e) => { if (e.target === modalHandGuide) modalHandGuide.classList.remove('active'); });
+            }
+
+            function setInstructorTab(tab) {
+                [btnModeHuman, btnModePhoto, btnModeSkeleton].forEach(b => { if (b) b.classList.remove('active'); });
+                [guideHumanStage, guidePhotoWrapper, guideSkeletonWrapper].forEach(w => { if (w) w.classList.remove('active'); });
+
+                if (tab === 'human') {
+                    if (btnModeHuman) btnModeHuman.classList.add('active');
+                    if (guideHumanStage) guideHumanStage.classList.add('active');
+                    if (window.Hand3D && activeGuideSign) {
+                        setTimeout(() => {
+                            const viewport = document.getElementById('hand-3d-viewport');
+                            if (viewport && !viewport.querySelector('canvas')) {
+                                window.Hand3D.init(viewport);
+                                window.Hand3D.displaySign(activeGuideSign, currentSpeed === 'slow-motion' ? 'slow-motion' : '');
+                            }
+                        }, 50);
+                    }
+                } else if (tab === 'photo') {
+                    if (btnModePhoto) btnModePhoto.classList.add('active');
+                    if (guidePhotoWrapper) guidePhotoWrapper.classList.add('active');
+                } else if (tab === 'skeleton') {
+                    if (btnModeSkeleton) btnModeSkeleton.classList.add('active');
+                    if (guideSkeletonWrapper) guideSkeletonWrapper.classList.add('active');
+                }
+            }
+
+            if (btnModeHuman) btnModeHuman.addEventListener('click', () => setInstructorTab('human'));
+            if (btnModePhoto) btnModePhoto.addEventListener('click', () => setInstructorTab('photo'));
+            if (btnModeSkeleton) btnModeSkeleton.addEventListener('click', () => setInstructorTab('skeleton'));
+
+            // Playback Speed Controls
+            if (btnSpeedNormal && btnSpeedSlow) {
+                btnSpeedNormal.addEventListener('click', () => {
+                    currentSpeed = 'normal';
+                    btnSpeedNormal.classList.add('active');
+                    btnSpeedSlow.classList.remove('active');
+                    if (window.Hand3D) window.Hand3D.playbackSpeed = 1.0;
+                    if (activeGuideSign) renderInstructorStage(activeGuideSign);
+                });
+                btnSpeedSlow.addEventListener('click', () => {
+                    currentSpeed = 'slow-motion';
+                    btnSpeedSlow.classList.add('active');
+                    btnSpeedNormal.classList.remove('active');
+                    if (window.Hand3D) window.Hand3D.playbackSpeed = 0.5;
+                    if (activeGuideSign) renderInstructorStage(activeGuideSign);
+                });
+            }
+
+            // Replay Animation
+            if (btnReplayAnim) {
+                btnReplayAnim.addEventListener('click', () => {
+                    if (activeGuideSign) {
+                        if (window.Hand3D) window.Hand3D.displaySign(activeGuideSign, currentSpeed === 'slow-motion' ? 'slow-motion' : '');
+                        renderInstructorStage(activeGuideSign);
+                    }
+                });
+            }
+
+            if (btnGuideTestSpeech) {
+                btnGuideTestSpeech.addEventListener('click', () => {
+                    if (activeGuideSign && 'speechSynthesis' in window) {
+                        window.speechSynthesis.cancel();
+                        const utt = new SpeechSynthesisUtterance(activeGuideSign.name);
+                        window.speechSynthesis.speak(utt);
+                    }
+                });
+            }
+
+            function renderCatalog(filterCategory = 'all', searchQuery = '') {
+                if (!grid) return;
+                grid.innerHTML = '';
+
+                const catalog = window.dictionaryData || [];
+                const filtered = catalog.filter(item => {
+                    const matchesCat = filterCategory === 'all' || item.category === filterCategory;
+                    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                          item.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                          item.category.toLowerCase().includes(searchQuery.toLowerCase());
+                    return matchesCat && matchesSearch;
+                });
+
+                if (filtered.length === 0) {
+                    grid.innerHTML = `<div class="no-data-card glass-panel"><i class="fa-solid fa-magnifying-glass"></i><h3>No gestures found</h3><p>Try searching for a different term like "Help", "Water", or "Greetings".</p></div>`;
+                    return;
+                }
+
+                filtered.forEach((item, idx) => {
+                    const card = document.createElement('div');
+                    card.className = 'sign-catalog-card glass-panel';
+                    card.innerHTML = `
+                        <div class="card-badge-top">
+                            <span class="badge badge-mode">${item.category}</span>
+                        </div>
+                        <div class="card-visual-header" style="display:flex; align-items:center; gap:12px;">
+                            <div class="card-human-preview" title="Real hand posture demo">
+                                ${window.renderRealPhotoHand ? window.renderRealPhotoHand(item, true) : `<i class="fa-solid ${item.icon}"></i>`}
+                            </div>
+                            <div class="catalog-card-info">
+                                <h3>${item.name}</h3>
+                                <p style="font-size: 11px; color: var(--primary); font-weight: 600;">📍 ${item.bodyPosition || 'Front of Camera'}</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: var(--text-muted); line-height: 1.4; margin-top: 6px;">${item.desc}</p>
+                        <div class="catalog-card-action" style="display:grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <button class="btn btn-sm btn-primary btn-catalog-demo" data-index="${idx}">
+                                <i class="fa-solid fa-hand"></i> Real Hand Demo
+                            </button>
+                            <button class="btn btn-sm btn-secondary btn-speak-card" data-speech="${item.name}">
+                                <i class="fa-solid fa-volume-high"></i> Listen
+                            </button>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                // Attach modal demo listeners
+                document.querySelectorAll('.btn-catalog-demo').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const index = parseInt(btn.getAttribute('data-index'), 10);
+                        const target = filtered[index];
+                        if (target) openCatalogModal(target);
+                    });
+                });
+
+                // Attach audio TTS listeners
+                document.querySelectorAll('.btn-speak-card').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const word = btn.getAttribute('data-speech');
+                        if ('speechSynthesis' in window) {
+                            window.speechSynthesis.cancel();
+                            const utt = new SpeechSynthesisUtterance(word);
+                            window.speechSynthesis.speak(utt);
+                        }
+                    });
+                });
+            }
+
+            if (searchInput && categoryPills) {
+                searchInput.addEventListener('input', (e) => {
+                    const activePill = categoryPills.querySelector('.pill.active');
+                    const cat = activePill ? activePill.getAttribute('data-category') : 'all';
+                    renderCatalog(cat, e.target.value);
+                });
+
+                categoryPills.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('pill')) {
+                        categoryPills.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+                        e.target.classList.add('active');
+                        const cat = e.target.getAttribute('data-category');
+                        renderCatalog(cat, searchInput.value);
+                    }
+                });
+            }
+
+            renderCatalog();
+        });
+    </script>
+</body>
+</html>
