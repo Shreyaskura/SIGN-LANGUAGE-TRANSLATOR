@@ -18,3 +18,7 @@ Thumbs.db
 # Database dumps / temp files
 *.sqlite3-journal
 *.log
+_*
+*.bak
+*.bak.js
+

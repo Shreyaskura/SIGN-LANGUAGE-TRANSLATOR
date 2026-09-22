@@ -1,262 +1,471 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Language Translator | Live Camera Recognition (DBS & DBE Project)</title>
-    <meta name="description" content="AI-powered Sign Language Translator application featuring live camera gesture recognition and visual hand signs guide on a single interactive dashboard.">
-    
+    <title>Sign Language Translator | Real-Time Gesture Recognition & 3D Intelligence</title>
+    <meta name="description"
+        content="Sign Language Translator transforms gestures into natural voice and text in real-time. Featuring neural landmark tracking, live camera recognition, and complete ASL dictionary.">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css">
-    
+
     <!-- MediaPipe Hands & Camera Utils CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 </head>
-<body>
-    <div class="app-container">
+
+<body class="theme-signflow">
+    <div class="app-page-wrapper">
         <!-- Top Navigation Header -->
-<header class="navbar">
-    <div class="nav-brand">
-        <a href="/" class="logo"><!-- Simple hand icon -->
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="24" height="24" fill="var(--primary)" rx="4"/>
-                <path d="M8 12l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </a>
-        <div class="brand-text">
-            <h1>SignTranslate</h1>
-            <p class="tagline">Real-Time Sign Language Translator</p>
-        </div>
-    </div>
-    <nav class="nav-links">
-        <a href="/" class="nav-item active">Translator</a>
-        <a href="/library.html" class="nav-item">Sign Library</a>
-        <a href="/history.html" class="nav-item">History</a>
-        <a href="/about.html" class="nav-item">About</a>
-    </nav>
-    <div class="nav-actions">
-        <button id="btn-settings" class="icon-btn" aria-label="Settings"><i class="fa-solid fa-gear"></i></button>
-    </div>
-</header>
-
-        <!-- Main Unified Workspace (Camera & Output on Left, Reference on Right) -->
-        <main class="main-workspace unified-workspace">
-            
-            <!-- Left Column: Camera, Recognition Output, Sentence Builder & History -->
-            <div class="workspace-col-left">
-                <!-- 1. Live Camera Card -->
-                <section class="camera-card glass-panel">
-                    <div class="card-header">
-                        <div class="header-title">
-                            <i class="fa-solid fa-video"></i>
-                            <h2>Live Camera Recognition</h2>
-                        </div>
-                        <div class="camera-badges">
-                            <span class="badge badge-live" id="live-indicator" style="display: none;">
-                                <span class="pulse-dot"></span> LIVE
-                            </span>
-                            <span class="badge badge-fps" id="fps-counter">0 FPS</span>
-                        </div>
+        <header class="navbar">
+            <div class="nav-brand">
+                <a href="#hero-section" class="logo">
+                    <div class="logo-icon-wrap">
+                        <i class="fa-solid fa-hands-asl-interpreting"></i>
                     </div>
-
-                    <div class="video-container" id="video-container">
-                        <video id="webcam" playsinline autoplay muted></video>
-                        <canvas id="output_canvas"></canvas>
-
-                        <!-- Camera Placeholder when off -->
-                        <div class="camera-placeholder" id="camera-placeholder">
-                            <div class="placeholder-icon">
-                                <i class="fa-solid fa-camera"></i>
-                            </div>
-                            <h3>Camera Offline</h3>
-                            <p>Click "Start Camera" to initiate live hand gesture recognition & landmark tracking.</p>
-                            <button id="btn-start-placeholder" class="btn btn-primary">
-                                <i class="fa-solid fa-power-off"></i> Start Camera
-                            </button>
-                        </div>
-
-                        <!-- Overlay Hand Tracking Info -->
-                        <div class="landmark-info-overlay" id="landmark-overlay">
-                            <div class="info-chip">
-                                <i class="fa-solid fa-hand"></i>
-                                <span id="hand-count-label">No Hand Detected</span>
-                            </div>
-                            <div class="info-chip">
-                                <i class="fa-solid fa-bullseye"></i>
-                                <span id="confidence-label">Confidence: 0%</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Camera Controls Toolbar -->
-                    <div class="camera-controls">
-                        <button id="btn-toggle-camera" class="btn btn-primary">
-                            <i class="fa-solid fa-video"></i> <span id="camera-btn-text">Start Camera</span>
-                        </button>
-                        <button id="btn-flip-camera" class="btn btn-outline active" title="Flip Camera View">
-                            <i class="fa-solid fa-camera-rotate"></i> <span>Mirror</span>
-                        </button>
-                        <button id="btn-toggle-skeleton" class="btn btn-outline active" title="Toggle Landmark Drawing">
-                            <i class="fa-solid fa-draw-polygon"></i> <span>Skeleton: ON</span>
-                        </button>
-                        <button id="btn-toggle-tts" class="btn btn-outline active" title="Toggle Auto Voice Speech">
-                            <i class="fa-solid fa-volume-high"></i> <span>Speech: ON</span>
-                        </button>
-                        <button id="btn-quick-hi" class="btn btn-secondary" title="Test HI / HELLO Gesture">
-                            <i class="fa-solid fa-hand"></i> <span>Test "HI" Sign</span>
-                        </button>
-                    </div>
-                </section>
-
-                <!-- 2. Current Detected Sign Display Card (Primary Focus) -->
-                <div class="translation-card glass-panel highlight-card">
-                    <div class="card-header">
-                        <div class="header-title">
-                            <i class="fa-solid fa-language"></i>
-                            <h2>Detected Translation</h2>
-                        </div>
-                        <span class="badge badge-mode" id="recognition-mode">Real-Time Classifier</span>
-                    </div>
-
-                    <div class="translation-display">
-                        <div class="sign-result-box">
-                            <div class="sign-icon" id="sign-icon-display">
-                                <i class="fa-solid fa-hand"></i>
-                            </div>
-                            <div class="sign-text-container">
-                                <h3 id="current-sign-name" class="empty-state">Waiting for sign...</h3>
-                                <p id="current-sign-desc" class="sign-category">Position your hand in front of the camera or select a sign from the library.</p>
-                            </div>
-                        </div>
-
-                        <div class="confidence-bar-container">
-                            <div class="bar-header">
-                                <span>Recognition Confidence</span>
-                                <span id="confidence-percent">0%</span>
-                            </div>
-                            <div class="confidence-bar">
-                                <div class="confidence-fill" id="confidence-fill" style="width: 0%;"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. Sentence Builder Card -->
-                <div class="sentence-card glass-panel">
-                    <div class="card-header">
-                        <div class="header-title">
-                            <i class="fa-solid fa-align-left"></i>
-                            <h2>Sentence Builder & Speech</h2>
-                        </div>
-                        <div class="sentence-actions">
-                            <button id="btn-speak-sentence" class="btn btn-icon" title="Speak Sentence">
-                                <i class="fa-solid fa-volume-high"></i>
-                            </button>
-                            <button id="btn-copy-sentence" class="btn btn-icon" title="Copy to Clipboard">
-                                <i class="fa-solid fa-copy"></i>
-                            </button>
-                            <button id="btn-clear-sentence" class="btn btn-icon btn-danger-icon" title="Clear Buffer">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="sentence-box">
-                        <p id="sentence-buffer" class="placeholder-text">Translated signs will accumulate here into full sentences...</p>
-                    </div>
-
-                    <div class="sentence-controls">
-                        <button id="btn-add-space" class="btn btn-sm btn-outline">
-                            <i class="fa-solid fa-space-bar"></i> Add Space
-                        </button>
-                        <button id="btn-backspace" class="btn btn-sm btn-outline">
-                            <i class="fa-solid fa-delete-left"></i> Delete Last
-                        </button>
-                        <button id="btn-save-translation" class="btn btn-sm btn-secondary">
-                            <i class="fa-solid fa-floppy-disk"></i> Log to DB
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 4. Live History Log Card -->
-                <div class="history-card glass-panel">
-                    <div class="card-header">
-                        <div class="header-title">
-                            <i class="fa-solid fa-clock-rotate-left"></i>
-                            <h2>Translation History</h2>
-                        </div>
-                        <span class="badge badge-count" id="history-count">0 Records</span>
-                    </div>
-
-                    <div class="history-table-wrapper">
-                        <table class="history-table">
-                            <thead>
-                                <tr>
-                                    <th>Time</th>
-                                    <th>Sign / Text</th>
-                                    <th>Confidence</th>
-                                    <th>DB Sync</th>
-                                </tr>
-                            </thead>
-                            <tbody id="history-table-body">
-                                <tr class="no-data-row">
-                                    <td colspan="4">No translations logged yet in this session.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                </a>
+                <div class="brand-text">
+                    <span class="brand-name">Sign Language Translator</span>
+                    <span class="brand-badge">REAL-TIME AI</span>
                 </div>
             </div>
 
-            <!-- Right Column: Visual Hand Signs Library -->
-            <div class="workspace-col-right glass-panel catalog-side-panel">
-                <div class="card-header">
-                    <div class="header-title">
-                        <i class="fa-solid fa-book-bookmark"></i>
-                        <h2>Signs Reference Library</h2>
+            <nav class="nav-links">
+                <a href="#hero-section" class="nav-item active">Translator</a>
+                <a href="#demo-section" class="nav-item">Sign Demo</a>
+                <a href="#camera-section" class="nav-item">Live Camera</a>
+                <a href="signs.html" class="nav-item">Sign Library</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button id="btn-analytics" class="btn-nav-glass" title="View Database Analytics (DBS & DBE)">
+                    <i class="fa-solid fa-database"></i> <span>DB Analytics</span>
+                </button>
+                <a href="#camera-section" class="btn btn-primary btn-nav-cta">
+                    <i class="fa-solid fa-camera"></i> <span>Launch Camera</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- ══════════════════════════════════════════════════════════════
+             1ST PAGE: HERO SECTION (SIGN LANGUAGE TRANSLATOR)
+             ══════════════════════════════════════════════════════════════ -->
+        <section class="hero-section" id="hero-section">
+            <div class="hero-container">
+                <!-- Left Hero Content -->
+                <div class="hero-content">
+                    <div class="hero-live-tag">
+                        <span class="pulse-dot-red"></span>
+                        <span>LIVE LANGUAGE, IN MOTION</span>
                     </div>
-                    <a href="signs.html" class="btn btn-sm btn-outline">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Full View
-                    </a>
+
+                    <h1 class="hero-headline">
+                        Every hand<br>
+                        <span class="coral-gradient-text">has a voice.</span>
+                    </h1>
+
+                    <p class="hero-subtitle">
+                        Sign Language Translator turns movement into meaning — giving every conversation a little more room to breathe.
+                    </p>
+
+                    <div class="hero-cta-group">
+                        <a href="#camera-section" id="btn-hero-try-camera" class="btn-hero-coral">
+                            <span>Try with camera</span>
+                            <i class="fa-solid fa-camera"></i>
+                        </a>
+                        <a href="#demo-section" class="hero-text-link">
+                            <span>See how it works</span>
+                            <i class="fa-solid fa-arrow-down"></i>
+                        </a>
+                    </div>
+
+                    <div class="hero-perks-row">
+                        <span class="perk-item"><i class="fa-solid fa-check"></i> no sign-up needed</span>
+                        <span class="perk-item"><i class="fa-solid fa-check"></i> works in your browser</span>
+                    </div>
+
+                    <!-- Quick Sign Switcher Bar at Bottom Left -->
+                    <div class="hero-quick-signs-dock">
+                        <div class="quick-signs-label">
+                            <span class="indicator-dot"></span>
+                            <span>START WITH A SIGN</span>
+                        </div>
+                        <div class="quick-signs-list">
+                            <button class="quick-sign-btn active" data-sign="THUMBS UP" data-display="THUMBS UP" data-conf="98.6%" data-cat="POSITIVE · READY" data-img="assets/hero_asl_thumbsup.jpg">
+                                <span class="qs-emoji">👍</span>
+                                <div class="qs-text">
+                                    <span class="qs-name">thumbs up</span>
+                                    <span class="qs-sub">POSITIVE · READY</span>
+                                </div>
+                            </button>
+
+                            <button class="quick-sign-btn" data-sign="HI / HELLO" data-display="HELLO" data-conf="99.2%" data-cat="WAVE · WELCOME" data-img="assets/hero_asl_hello.jpg">
+                                <span class="qs-emoji">👏</span>
+                                <div class="qs-text">
+                                    <span class="qs-name">hello</span>
+                                    <span class="qs-sub">WAVE · WELCOME</span>
+                                </div>
+                            </button>
+
+                            <button class="quick-sign-btn" data-sign="I LOVE YOU" data-display="I LOVE YOU" data-conf="97.8%" data-cat="CONNECT · EXPRESS" data-img="assets/hero_asl_ily.jpg">
+                                <span class="qs-emoji">🤟</span>
+                                <div class="qs-text">
+                                    <span class="qs-name">i love you</span>
+                                    <span class="qs-sub">CONNECT · EXPRESS</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="catalog-panel-body">
-                    <!-- Filter Controls -->
-                    <div class="dictionary-filter-bar">
-                        <div class="search-input-wrapper">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            <input type="text" id="dict-search" placeholder="Search sign (Help, Water, Hello, Please)...">
-                        </div>
-                        <div class="category-pills" id="category-pills">
-                            <button class="pill active" data-category="all">All</button>
-                            <button class="pill" data-category="Emergency">Emergency</button>
-                            <button class="pill" data-category="Greetings">Greetings</button>
-                            <button class="pill" data-category="Daily Needs">Needs</button>
-                            <button class="pill" data-category="Expressions">Expressions</button>
-                            <button class="pill" data-category="Common">Common</button>
-                            <button class="pill" data-category="Alphabet">Alphabet</button>
-                            <button class="pill" data-category="Numbers">Numbers</button>
-                        </div>
-                    </div>
+                <!-- Right Stage with Photorealistic Studio ASL Hand & Neural Tracking Overlay -->
+                <div class="hero-stage-col">
+                    <div class="hero-orbital-stage" id="hero-orbital-stage">
+                        <!-- Concentric Radar / Orbital Rings -->
+                        <div class="radar-orbit radar-orbit-1"></div>
+                        <div class="radar-orbit radar-orbit-2"></div>
+                        <div class="radar-orbit radar-orbit-3"></div>
+                        <div class="radar-sweep"></div>
 
-                    <!-- Visual Hand Cards Grid -->
-                    <div class="side-signs-grid" id="dictionary-grid">
-                        <!-- Populated dynamically with hand visual cards -->
+                        <!-- Photorealistic ASL Hand Showcase with Depth -->
+                        <div class="hero-hand-wrapper" id="hero-hand-wrapper" title="Click to switch sign">
+                            <div class="click-to-switch-hint"><i class="fa-solid fa-hand-pointer"></i> Click hand to switch sign ↻</div>
+                            <div class="hero-hand-glow"></div>
+                            <img id="hero-hand-img" src="assets/hero_asl_thumbsup.jpg" alt="Realistic ASL Sign Hand" class="hero-hand-img" />
+                            
+                            <!-- Interactive 21-Landmark Neural Skeleton SVG Overlay -->
+                            <svg id="hero-landmark-svg" class="hero-landmark-svg" viewBox="0 0 500 500">
+                                <!-- Rendered dynamically by app.js -->
+                            </svg>
+                        </div>
+
+                        <!-- Floating Interactive Feature Tags -->
+                        <div class="hero-stage-controls">
+                            <button id="btn-toggle-hero-landmarks" class="btn-hud-control active" title="Toggle 21 Neural Keypoints">
+                                <i class="fa-solid fa-draw-polygon"></i> <span>21 Keypoints</span>
+                            </button>
+                            <button id="btn-hero-pronounce" class="btn-hud-control" title="Listen to Pronunciation">
+                                <i class="fa-solid fa-volume-high"></i> <span>Voice</span>
+                            </button>
+                        </div>
+
+                        <!-- Telemetry HUD Element 1: Tracking Handshape Pill -->
+                        <div class="hud-overlay hud-tracking-pill">
+                            <span class="hud-crosshair">✣</span>
+                            <span class="hud-text">TRACKING HANDSHAPE</span>
+                            <span class="hud-bracket">⌟</span>
+                        </div>
+
+                        <!-- Telemetry HUD Element 2: Floating Confidence Card -->
+                        <div class="hud-overlay hud-confidence-card">
+                            <div class="hud-card-corner"></div>
+                            <span class="hud-conf-val" id="hero-conf-value">98.6%</span>
+                            <span class="hud-conf-lbl">CONFIDENCE</span>
+                        </div>
+
+                        <!-- Telemetry HUD Element 3: Floating Detected Card with Audio Waveform -->
+                        <div class="hud-overlay hud-detected-card">
+                            <span class="hud-det-sub">DETECTED</span>
+                            <h3 class="hud-det-title" id="hero-detected-name">THUMBS UP</h3>
+                            <div class="hud-waveform-bars" id="hero-waveform">
+                                <span class="bar bar-1"></span>
+                                <span class="bar bar-2"></span>
+                                <span class="bar bar-3"></span>
+                                <span class="bar bar-4"></span>
+                                <span class="bar bar-5"></span>
+                            </div>
+                        </div>
+
+                        <!-- Language Metadata Tag -->
+                        <div class="hud-overlay hud-lang-meta">
+                            <span>ASL</span>
+                            <span class="lang-divider">—</span>
+                            <span>English</span>
+                        </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-        </main>
+        <!-- ══════════════════════════════════════════════════════════════
+             2ND PAGE: HAND SIGN DEMO GALLERY (A LITTLE PRACTICE...)
+             ══════════════════════════════════════════════════════════════ -->
+        <section class="demo-gallery-section" id="demo-section">
+            <div class="demo-gallery-container">
+                <!-- Section Header Row -->
+                <div class="demo-section-header">
+                    <div class="demo-header-titles">
+                        <div class="demo-chapter-tag">
+                            <span class="chapter-num">04</span>
+                            <span class="chapter-line"></span>
+                            <span class="chapter-label">KEEP LEARNING</span>
+                        </div>
+                        <h2 class="demo-main-title">
+                            A little practice<br>
+                            <span class="coral-gradient-text">goes a long way.</span>
+                        </h2>
+                    </div>
+
+                    <div class="demo-header-actions">
+                        <a href="signs.html" class="link-explore-library">
+                            <span>Explore the sign library</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hand Sign Demo Cards Grid (Matching reference image) -->
+                <div class="demo-cards-grid" id="demo-cards-grid">
+                    <!-- Populated dynamically by app.js with lettered 3D hand sign cards -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════════════════════════════════════════════════════════
+             3RD PAGE: LIVE CAMERA RECOGNITION & TRANSLATION WORKSPACE
+             ══════════════════════════════════════════════════════════════ -->
+        <section class="camera-workspace-section" id="camera-section">
+            <div class="section-title-bar">
+                <div class="title-with-pill">
+                    <span class="pulse-dot-red"></span>
+                    <h2>Real-Time Live Camera Recognition</h2>
+                </div>
+                <p class="section-subtitle">Point your hand towards the webcam to perform live MediaPipe neural landmark detection & translation.</p>
+            </div>
+
+            <main class="main-workspace unified-workspace">
+                <!-- Left Column: Camera, Recognition Output, Sentence Builder & History -->
+                <div class="workspace-col-left">
+                    <!-- 1. Live Camera Card -->
+                    <section class="camera-card glass-panel">
+                        <div class="card-header">
+                            <div class="header-title">
+                                <i class="fa-solid fa-video"></i>
+                                <h3>Live Webcam & Skeleton Tracker</h3>
+                            </div>
+                            <div class="camera-badges">
+                                <span class="badge badge-live" id="live-indicator" style="display: none;">
+                                    <span class="pulse-dot"></span> LIVE
+                                </span>
+                                <span class="badge badge-fps" id="fps-counter">0 FPS</span>
+                            </div>
+                        </div>
+
+                        <div class="video-container" id="video-container">
+                            <video id="webcam" playsinline autoplay muted></video>
+                            <canvas id="output_canvas"></canvas>
+
+                            <!-- Camera Placeholder when off -->
+                            <div class="camera-placeholder" id="camera-placeholder">
+                                <div class="placeholder-icon">
+                                    <i class="fa-solid fa-camera"></i>
+                                </div>
+                                <h3>Camera Offline</h3>
+                                <p>Click "Start Camera" to initiate live hand gesture recognition & landmark tracking.</p>
+                                <button id="btn-start-placeholder" class="btn btn-primary">
+                                    <i class="fa-solid fa-power-off"></i> Start Camera
+                                </button>
+                            </div>
+
+                            <!-- Overlay Hand Tracking Info -->
+                            <div class="landmark-info-overlay" id="landmark-overlay">
+                                <div class="info-chip">
+                                    <i class="fa-solid fa-hand"></i>
+                                    <span id="hand-count-label">No Hand Detected</span>
+                                </div>
+                                <div class="info-chip">
+                                    <i class="fa-solid fa-bullseye"></i>
+                                    <span id="confidence-label">Confidence: 0%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Camera Controls Toolbar -->
+                        <div class="camera-controls">
+                            <button id="btn-toggle-camera" class="btn btn-primary">
+                                <i class="fa-solid fa-video"></i> <span id="camera-btn-text">Start Camera</span>
+                            </button>
+                            <button id="btn-flip-camera" class="btn btn-outline active" title="Flip Camera View">
+                                <i class="fa-solid fa-camera-rotate"></i> <span>Mirror</span>
+                            </button>
+                            <button id="btn-toggle-skeleton" class="btn btn-outline active" title="Toggle Landmark Drawing">
+                                <i class="fa-solid fa-draw-polygon"></i> <span>Skeleton: ON</span>
+                            </button>
+                            <button id="btn-toggle-tts" class="btn btn-outline active" title="Toggle Auto Voice Speech">
+                                <i class="fa-solid fa-volume-high"></i> <span>Speech: ON</span>
+                            </button>
+                            <button id="btn-quick-hi" class="btn btn-secondary" title="Test HI / HELLO Gesture">
+                                <i class="fa-solid fa-hand"></i> <span>Test "HI" Sign</span>
+                            </button>
+                            <button id="btn-toggle-library-toolbar" class="btn btn-outline" title="Show or Hide Signs Reference Library">
+                                <i class="fa-solid fa-book-bookmark"></i> <span id="library-toolbar-text">Library: ON</span>
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- 2. Current Detected Sign Display Card (Primary Focus) -->
+                    <div class="translation-card glass-panel highlight-card">
+                        <div class="card-header">
+                            <div class="header-title">
+                                <i class="fa-solid fa-language"></i>
+                                <h3>Detected Translation</h3>
+                            </div>
+                            <span class="badge badge-mode" id="recognition-mode">Real-Time Classifier</span>
+                        </div>
+
+                        <div class="translation-display">
+                            <div class="sign-result-box">
+                                <div class="sign-icon" id="sign-icon-display">
+                                    <i class="fa-solid fa-hand"></i>
+                                </div>
+                                <div class="sign-text-container">
+                                    <h3 id="current-sign-name" class="empty-state">Waiting for sign...</h3>
+                                    <p id="current-sign-desc" class="sign-category">Position your hand in front of the camera or select a sign from the demo.</p>
+                                </div>
+                            </div>
+
+                            <div class="confidence-bar-container">
+                                <div class="bar-header">
+                                    <span>Recognition Confidence</span>
+                                    <span id="confidence-percent">0%</span>
+                                </div>
+                                <div class="confidence-bar">
+                                    <div class="confidence-fill" id="confidence-fill" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Sentence Builder Card -->
+                    <div class="sentence-card glass-panel">
+                        <div class="card-header">
+                            <div class="header-title">
+                                <i class="fa-solid fa-align-left"></i>
+                                <h3>Sentence Builder & Speech</h3>
+                            </div>
+                            <div class="sentence-actions">
+                                <button id="btn-speak-sentence" class="btn btn-icon" title="Speak Sentence">
+                                    <i class="fa-solid fa-volume-high"></i>
+                                </button>
+                                <button id="btn-copy-sentence" class="btn btn-icon" title="Copy to Clipboard">
+                                    <i class="fa-solid fa-copy"></i>
+                                </button>
+                                <button id="btn-clear-sentence" class="btn btn-icon btn-danger-icon" title="Clear Buffer">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="sentence-box">
+                            <p id="sentence-buffer" class="placeholder-text">Translated signs will accumulate here into full sentences...</p>
+                        </div>
+
+                        <div class="sentence-controls">
+                            <button id="btn-add-space" class="btn btn-sm btn-outline">
+                                <i class="fa-solid fa-space-bar"></i> Add Space
+                            </button>
+                            <button id="btn-backspace" class="btn btn-sm btn-outline">
+                                <i class="fa-solid fa-delete-left"></i> Delete Last
+                            </button>
+                            <button id="btn-save-translation" class="btn btn-sm btn-secondary">
+                                <i class="fa-solid fa-floppy-disk"></i> Log to DB
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 4. Live History Log Card -->
+                    <div class="history-card glass-panel">
+                        <div class="card-header">
+                            <div class="header-title">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                                <h3>Translation History</h3>
+                            </div>
+                            <span class="badge badge-count" id="history-count">0 Records</span>
+                        </div>
+
+                        <div class="history-table-wrapper">
+                            <table class="history-table">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Sign / Text</th>
+                                        <th>Confidence</th>
+                                        <th>DB Sync</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="history-table-body">
+                                    <tr class="no-data-row">
+                                        <td colspan="4">No translations logged yet in this session.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Visual Hand Signs Library -->
+                <div class="workspace-col-right glass-panel catalog-side-panel" id="catalog-side-panel">
+                    <div class="card-header">
+                        <div class="header-title">
+                            <i class="fa-solid fa-book-bookmark"></i>
+                            <h3>Signs Reference Library</h3>
+                            <span class="badge badge-counter" id="library-count-badge">24</span>
+                        </div>
+                        <div class="header-actions">
+                            <a href="signs.html" class="btn btn-sm btn-outline" title="Open Complete Catalog Page">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Full View
+                            </a>
+                            <button class="btn btn-sm btn-ghost btn-close-library" id="btn-close-library" title="Remove / Hide this panel">
+                                <i class="fa-solid fa-xmark"></i> Hide
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="catalog-panel-body">
+                        <!-- Filter Controls -->
+                        <div class="dictionary-filter-bar">
+                            <div class="search-input-wrapper">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="dict-search"
+                                    placeholder="Search sign (Help, Water, Hello, Please)...">
+                            </div>
+                            <div class="category-pills" id="category-pills">
+                                <button class="pill active" data-category="all">All</button>
+                                <button class="pill" data-category="Emergency">Emergency</button>
+                                <button class="pill" data-category="Greetings">Greetings</button>
+                                <button class="pill" data-category="Daily Needs">Needs</button>
+                                <button class="pill" data-category="Expressions">Expressions</button>
+                                <button class="pill" data-category="Common">Common</button>
+                                <button class="pill" data-category="Alphabet">Alphabet</button>
+                                <button class="pill" data-category="Numbers">Numbers</button>
+                            </div>
+                        </div>
+
+                        <!-- Visual Hand Cards Grid -->
+                        <div class="side-signs-grid" id="dictionary-grid">
+                            <!-- Populated dynamically with hand visual cards -->
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </section>
+
+        <!-- ══════════════════════════════════════════════════════════════
+             MODALS: DATABASE ANALYTICS & HAND GUIDE DEMO
+             ══════════════════════════════════════════════════════════════ -->
 
         <!-- Modal: DBS & DBE Database Analytics Dashboard -->
         <div class="modal-backdrop" id="modal-analytics">
@@ -318,9 +527,9 @@
                                 <button class="tab-btn" data-tab="nosql-schema">NoSQL JSON (MongoDB)</button>
                                 <button class="tab-btn" data-tab="sql-queries">Complex Analytics SQL</button>
                             </div>
-                            
+
                             <div class="tab-content active" id="tab-sql-schema">
-<pre><code>-- 3NF Normalized PostgreSQL Schema for Sign Language Translator
+                                <pre><code>-- 3NF Normalized PostgreSQL Schema for Sign Language Translator
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
@@ -349,7 +558,7 @@ CREATE INDEX idx_translation_time ON translation_history(translated_at DESC);</c
                             </div>
 
                             <div class="tab-content" id="tab-nosql-schema">
-<pre><code>// MongoDB Document Schema for 3D Hand Landmark Sequence Storage
+                                <pre><code>// MongoDB Document Schema for 3D Hand Landmark Sequence Storage
 {
   "_id": ObjectId("65f8a12b3c4d5e6f7a8b9c0d"),
   "session_id": "sess_89f2a01",
@@ -371,7 +580,7 @@ CREATE INDEX idx_translation_time ON translation_history(translated_at DESC);</c
                             </div>
 
                             <div class="tab-content" id="tab-sql-queries">
-<pre><code>-- Advanced SQL Window Query: Top Most Frequently Recognized Signs per User
+                                <pre><code>-- Advanced SQL Window Query: Top Most Frequently Recognized Signs per User
 SELECT 
     u.username,
     g.sign_name,
@@ -407,56 +616,10 @@ ORDER BY total_translations DESC;</code></pre>
 
                 <div class="modal-body guide-modal-body">
                     <div class="guide-grid">
-                        <!-- Left: Real Human Sign Instructor & 21-Keypoint Switcher -->
+                        <!-- Left: 3D Hand Photo Demonstrator -->
                         <div class="guide-diagram-box glass-panel">
-                            <!-- View Mode Tabs -->
-                            <div class="instructor-mode-tabs">
-                                <button type="button" class="instructor-tab-btn active" id="btn-mode-human">
-                                    <i class="fa-solid fa-cube"></i> 3D Hand Model
-                                </button>
-                                <button type="button" class="instructor-tab-btn" id="btn-mode-photo">
-                                    <i class="fa-solid fa-images"></i> Palm & Back Views
-                                </button>
-                                <button type="button" class="instructor-tab-btn" id="btn-mode-skeleton">
-                                    <i class="fa-solid fa-draw-polygon"></i> 21-Keypoints
-                                </button>
-                            </div>
-
-                            <!-- Real Human Instructor Stage -->
-                            <div class="human-stage-wrapper active" id="guide-human-stage">
-                                <!-- Populated dynamically by JS with realistic human animated SVG -->
-                            </div>
-
-                            <!-- Real Photo Hand Model Reference (User Uploaded Model) -->
-                            <div class="photo-model-wrapper" id="guide-photo-wrapper">
-                                <div class="photo-model-container">
-                                    <div class="photo-hand-card">
-                                        <img src="assets/hand_dorsal.png" alt="Hand Model Dorsal View" />
-                                        <span class="photo-hand-label"><i class="fa-solid fa-hand"></i> Back View</span>
-                                    </div>
-                                    <div class="photo-hand-card">
-                                        <img src="assets/hand_palmar.png" alt="Hand Model Palmar View" />
-                                        <span class="photo-hand-label"><i class="fa-regular fa-hand"></i> Palm View</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 21-Keypoint Landmark Skeleton Canvas (Alternative View) -->
-                            <div class="skeleton-visual-wrapper" id="guide-skeleton-wrapper">
-                                <canvas id="guide-skeleton-canvas" width="280" height="280"></canvas>
-                            </div>
-
-                            <!-- Playback Speed & Replay Controls -->
-                            <div class="instructor-playback-controls" id="instructor-controls">
-                                <button type="button" class="control-chip active" id="btn-speed-normal" title="Normal 1.0x Speed">
-                                    <i class="fa-solid fa-play"></i> 1.0x
-                                </button>
-                                <button type="button" class="control-chip" id="btn-speed-slow" title="Slow Motion 0.5x Speed for Learning">
-                                    <i class="fa-solid fa-gauge-simple"></i> 0.5x Slow-Mo
-                                </button>
-                                <button type="button" class="control-chip btn-replay" id="btn-replay-anim" title="Replay Animation">
-                                    <i class="fa-solid fa-arrow-rotate-right"></i> Replay
-                                </button>
+                            <div class="modal-3d-photo-stage" id="guide-photo-stage">
+                                <!-- Populated dynamically by JS with 3D sign photo -->
                             </div>
                         </div>
 
@@ -492,15 +655,20 @@ ORDER BY total_translations DESC;</code></pre>
 
         <!-- Footer -->
         <footer class="app-footer">
-            <p>Built for <strong>Database Systems (DBS) & Database Engineering (DBE)</strong> Project Submission • PostgreSQL, MongoDB, FastAPI & MediaPipe</p>
+            <div class="footer-container">
+                <p>Signflow • AI-Powered 3D Sign Language Engine & Computer Vision</p>
+                <p class="footer-sub">Database Systems (DBS) & Database Engineering (DBE) Coursework • PostgreSQL, MongoDB, Three.js & MediaPipe</p>
+            </div>
         </footer>
     </div>
 
     <!-- Three.js 3D WebGL Engine & OrbitControls -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <script src="hand3d.js?v=3"></script>
+    <script src="assets/GLTFLoader.js"></script>
+    <script src="hand3d.js"></script>
     <!-- Application Logic JS Script -->
     <script src="app.js"></script>
 </body>
+
 </html>

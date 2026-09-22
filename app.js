@@ -104,14 +104,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
     window.dictionaryData = [
         // --- Emergency & Help ---
-        { 
-            name: "HELP", 
-            category: "Emergency", 
-            icon: "fa-hand-holding-medical", 
+        {
+            name: "HELP",
+            category: "Emergency",
+            icon: "fa-hand-holding-medical",
             handPose: "help",
             bodyPosition: "Chest Level",
-            motionClass: "anim-human-help-lift", 
-            handGuide: "Thumbs Up Lifted Over Flat Palm", 
+            motionClass: "anim-human-help-lift",
+            handGuide: "Thumbs Up Lifted Over Flat Palm",
             desc: "Two-hand ASL gesture: Closed thumbs-up fist placed on top of flat support palm, lifted upwards together.",
             fingers: { thumb: "Upright Extended 👍", index: "Folded into Fist ✊", middle: "Folded into Fist ✊", ring: "Folded into Fist ✊", pinky: "Folded into Fist ✊" },
             steps: [
@@ -120,14 +120,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Lift both hands upward together towards the camera to signal HELP."
             ]
         },
-        { 
-            name: "THUMBS UP", 
-            category: "Common", 
-            icon: "fa-thumbs-up", 
+        {
+            name: "THUMBS UP",
+            category: "Common",
+            icon: "fa-thumbs-up",
             handPose: "thumbs_up",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-thumbs", 
-            handGuide: "Thumb Extended Upward 👍", 
+            motionClass: "anim-human-thumbs",
+            handGuide: "Thumb Extended Upward 👍",
             desc: "Single hand with thumb pointing straight upwards and 4 fingers curled into a fist.",
             fingers: { thumb: "Upright Extended 👍", index: "Folded into Fist ✊", middle: "Folded into Fist ✊", ring: "Folded into Fist ✊", pinky: "Folded into Fist ✊" },
             steps: [
@@ -138,14 +138,14 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         // --- Greetings ---
-        { 
-            name: "HI / HELLO", 
-            category: "Greetings", 
-            icon: "fa-hand-wave", 
+        {
+            name: "HI / HELLO",
+            category: "Greetings",
+            icon: "fa-hand-wave",
             handPose: "wave_hello",
             bodyPosition: "Shoulder / Head",
-            motionClass: "anim-human-wave", 
-            handGuide: "5 Open Fingers Waving", 
+            motionClass: "anim-human-wave",
+            handGuide: "5 Open Fingers Waving",
             desc: "Open hand with all 5 fingers spread naturally, waving gently side-to-side.",
             fingers: { thumb: "Spread Open 🖐️", index: "Spread Open 🖐️", middle: "Spread Open 🖐️", ring: "Spread Open 🖐️", pinky: "Spread Open 🖐️" },
             steps: [
@@ -154,14 +154,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Wave gently side-to-side or hold upright to say HELLO."
             ]
         },
-        { 
-            name: "THANK YOU", 
-            category: "Greetings", 
-            icon: "fa-hands-clapping", 
+        {
+            name: "THANK YOU",
+            category: "Greetings",
+            icon: "fa-hands-clapping",
             handPose: "thank_you",
             bodyPosition: "Chin / Mouth",
-            motionClass: "anim-human-thank-you", 
-            handGuide: "Flat Hand Near Chin Moving Out", 
+            motionClass: "anim-human-thank-you",
+            handGuide: "Flat Hand Near Chin Moving Out",
             desc: "Flat hand with 4 fingers pressed together, starting near lips/chin and moving forward towards the camera.",
             fingers: { thumb: "Tucked / Flat", index: "Flat Extended Together 🖐️", middle: "Flat Extended Together 🖐️", ring: "Flat Extended Together 🖐️", pinky: "Flat Extended Together 🖐️" },
             steps: [
@@ -172,14 +172,14 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         // --- Daily Needs ---
-        { 
-            name: "WATER / ALPHABET W", 
-            category: "Daily Needs", 
-            icon: "fa-glass-water", 
+        {
+            name: "WATER / ALPHABET W",
+            category: "Daily Needs",
+            icon: "fa-glass-water",
             handPose: "w_water",
             bodyPosition: "Chin / Mouth",
-            motionClass: "anim-human-pulse", 
-            handGuide: "'W' 3-Finger Shape", 
+            motionClass: "anim-human-pulse",
+            handGuide: "'W' 3-Finger Shape",
             desc: "Index, Middle, and Ring fingers extended upward forming 'W', pinky folded and held by thumb.",
             fingers: { thumb: "Holding Pinky Folded", index: "Extended Up ☝️", middle: "Extended Up 🖕", ring: "Extended Up 🖖", pinky: "Folded into Palm ✊" },
             steps: [
@@ -190,14 +190,14 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         // --- Expressions ---
-        { 
-            name: "PLEASE", 
-            category: "Expressions", 
-            icon: "fa-heart", 
+        {
+            name: "PLEASE",
+            category: "Expressions",
+            icon: "fa-heart",
             handPose: "please",
             bodyPosition: "Chest Level",
-            motionClass: "anim-human-chest-circle", 
-            handGuide: "Flat Palm Circular Over Chest", 
+            motionClass: "anim-human-chest-circle",
+            handGuide: "Flat Palm Circular Over Chest",
             desc: "Flat open hand placed against chest rubbing in a gentle clockwise circular path.",
             fingers: { thumb: "Extended Flat", index: "Extended Flat", middle: "Extended Flat", ring: "Extended Flat", pinky: "Extended Flat" },
             steps: [
@@ -206,14 +206,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Rub your hand in a gentle clockwise circle over your chest."
             ]
         },
-        { 
-            name: "YES", 
-            category: "Expressions", 
-            icon: "fa-circle-check", 
+        {
+            name: "YES",
+            category: "Expressions",
+            icon: "fa-circle-check",
             handPose: "yes",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-nod", 
-            handGuide: "Nodding Fist (S Hand)", 
+            motionClass: "anim-human-nod",
+            handGuide: "Nodding Fist (S Hand)",
             desc: "Closed fist (S-hand shape) with thumb across knuckles nodding up and down at the wrist.",
             fingers: { thumb: "Tucked Across Knuckles", index: "Folded into Fist ✊", middle: "Folded into Fist ✊", ring: "Folded into Fist ✊", pinky: "Folded into Fist ✊" },
             steps: [
@@ -222,14 +222,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Tilt your wrist up and down rhythmically like a head nodding YES."
             ]
         },
-        { 
-            name: "NO", 
-            category: "Expressions", 
-            icon: "fa-circle-xmark", 
+        {
+            name: "NO",
+            category: "Expressions",
+            icon: "fa-circle-xmark",
             handPose: "no",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-snap", 
-            handGuide: "3-Finger Pinch Snap", 
+            motionClass: "anim-human-snap",
+            handGuide: "3-Finger Pinch Snap",
             desc: "Index and Middle fingers extended snapping down to touch Thumb tip repeatedly.",
             fingers: { thumb: "Touching Index & Middle", index: "Extended & Snapping 🤌", middle: "Extended & Snapping 🤌", ring: "Folded ✊", pinky: "Folded ✊" },
             steps: [
@@ -238,14 +238,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Repeat the quick snapping pinch twice to indicate NO."
             ]
         },
-        { 
-            name: "SORRY", 
-            category: "Expressions", 
-            icon: "fa-face-sad-tear", 
+        {
+            name: "SORRY",
+            category: "Expressions",
+            icon: "fa-face-sad-tear",
             handPose: "sorry",
             bodyPosition: "Chest Level",
-            motionClass: "anim-human-chest-circle", 
-            handGuide: "Closed Fist Over Chest", 
+            motionClass: "anim-human-chest-circle",
+            handGuide: "Closed Fist Over Chest",
             desc: "Closed fist (S hand) held against chest moving in a gentle circular path.",
             fingers: { thumb: "Tucked Across Knuckles", index: "Folded into Fist ✊", middle: "Folded into Fist ✊", ring: "Folded into Fist ✊", pinky: "Folded into Fist ✊" },
             steps: [
@@ -254,14 +254,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Rub in a gentle clockwise circle over your chest to say SORRY."
             ]
         },
-        { 
-            name: "GOOD / FINE", 
-            category: "Expressions", 
-            icon: "fa-thumbs-up", 
+        {
+            name: "GOOD / FINE",
+            category: "Expressions",
+            icon: "fa-thumbs-up",
             handPose: "wave_hello",
             bodyPosition: "Chest Level",
-            motionClass: "anim-human-pulse", 
-            handGuide: "Open 5 Fingers at Chest", 
+            motionClass: "anim-human-pulse",
+            handGuide: "Open 5 Fingers at Chest",
             desc: "Open hand with 5 fingers spread, thumb touching chest or moving gracefully outward.",
             fingers: { thumb: "Extended at Chest", index: "Extended Spread 🖐️", middle: "Extended Spread 🖐️", ring: "Extended Spread 🖐️", pinky: "Extended Spread 🖐️" },
             steps: [
@@ -270,14 +270,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Hold steady facing camera to indicate FINE or GOOD."
             ]
         },
-        { 
-            name: "PEACE / VICTORY / V", 
-            category: "Common", 
-            icon: "fa-hand-peace", 
+        {
+            name: "PEACE / VICTORY / V",
+            category: "Common",
+            icon: "fa-hand-peace",
             handPose: "peace_v",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "'V' 2-Finger Shape ✌️", 
+            motionClass: "anim-human-pulse",
+            handGuide: "'V' 2-Finger Shape ✌️",
             desc: "Index and Middle fingers extended pointing up and spread apart in a 'V'.",
             fingers: { thumb: "Holding Ring & Pinky", index: "Extended in V ✌️", middle: "Extended in V ✌️", ring: "Folded into Palm ✊", pinky: "Folded into Palm ✊" },
             steps: [
@@ -286,14 +286,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Hold your thumb over folded ring finger facing forward."
             ]
         },
-        { 
-            name: "OK SIGN / F", 
-            category: "Common", 
-            icon: "fa-hand-holding-heart", 
+        {
+            name: "OK SIGN / F",
+            category: "Common",
+            icon: "fa-hand-holding-heart",
             handPose: "ok_sign",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "Thumb & Index Circle 👌", 
+            motionClass: "anim-human-pulse",
+            handGuide: "Thumb & Index Circle 👌",
             desc: "Thumb and Index fingertips touching to form a circular loop, with other 3 fingers extended upward.",
             fingers: { thumb: "Touching Index Tip", index: "Curled to Thumb Tip 👌", middle: "Extended Up ☝️", ring: "Extended Up ☝️", pinky: "Extended Up ☝️" },
             steps: [
@@ -302,14 +302,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Hold the 'OK' loop clearly facing the camera."
             ]
         },
-        { 
-            name: "I LOVE YOU", 
-            category: "Common", 
-            icon: "fa-hand-spock", 
+        {
+            name: "I LOVE YOU",
+            category: "Common",
+            icon: "fa-hand-spock",
             handPose: "i_love_you",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "Thumb + Index + Pinky 🤟", 
+            motionClass: "anim-human-pulse",
+            handGuide: "Thumb + Index + Pinky 🤟",
             desc: "Thumb, Index, and Pinky fingers extended simultaneously while middle and ring are folded into palm.",
             fingers: { thumb: "Extended Outwards 👈", index: "Extended Straight ☝️", middle: "Folded into Palm ✊", ring: "Folded into Palm ✊", pinky: "Extended Outwards 🤙" },
             steps: [
@@ -318,14 +318,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Keep Middle and Ring fingers folded tightly against palm (forms I + L + Y)."
             ]
         },
-        { 
-            name: "ROCK / METAL", 
-            category: "Common", 
-            icon: "fa-hand-back-fist", 
+        {
+            name: "ROCK / METAL",
+            category: "Common",
+            icon: "fa-hand-back-fist",
             handPose: "rock_metal",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "Index & Pinky Extended 🤘", 
+            motionClass: "anim-human-pulse",
+            handGuide: "Index & Pinky Extended 🤘",
             desc: "Index and Pinky fingers extended upward while thumb folds over middle and ring fingers.",
             fingers: { thumb: "Holding Middle & Ring", index: "Extended Up ☝️", middle: "Folded into Palm ✊", ring: "Folded into Palm ✊", pinky: "Extended Up ☝️" },
             steps: [
@@ -334,14 +334,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Lock your thumb over the middle and ring fingernails."
             ]
         },
-        { 
-            name: "STOP / FIST", 
-            category: "Common", 
-            icon: "fa-hand-fist", 
+        {
+            name: "STOP / FIST",
+            category: "Common",
+            icon: "fa-hand-fist",
             handPose: "fist_stop",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "Tight Closed Fist ✊", 
+            motionClass: "anim-human-pulse",
+            handGuide: "Tight Closed Fist ✊",
             desc: "All fingers folded tightly into palm with thumb locked across fingers facing camera.",
             fingers: { thumb: "Locked Over Fingers", index: "Folded ✊", middle: "Folded ✊", ring: "Folded ✊", pinky: "Folded ✊" },
             steps: [
@@ -352,14 +352,14 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         // --- Numbers ---
-        { 
-            name: "POINT / ONE", 
-            category: "Numbers", 
-            icon: "fa-hand-pointer", 
+        {
+            name: "POINT / ONE",
+            category: "Numbers",
+            icon: "fa-hand-pointer",
             handPose: "point_one",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "Single Index Pointing Up ☝️", 
+            motionClass: "anim-human-pulse",
+            handGuide: "Single Index Pointing Up ☝️",
             desc: "Index finger pointing straight up, remaining fingers folded into a fist.",
             fingers: { thumb: "Holding Folded Fingers", index: "Extended Straight Up ☝️", middle: "Folded ✊", ring: "Folded ✊", pinky: "Folded ✊" },
             steps: [
@@ -368,14 +368,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Tuck your thumb across your folded middle finger."
             ]
         },
-        { 
-            name: "TWO", 
-            category: "Numbers", 
-            icon: "fa-hand-peace", 
+        {
+            name: "TWO",
+            category: "Numbers",
+            icon: "fa-hand-peace",
             handPose: "peace_v",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "Index & Middle Extended ✌️", 
+            motionClass: "anim-human-pulse",
+            handGuide: "Index & Middle Extended ✌️",
             desc: "Index and Middle fingers extended pointing up, ring & pinky folded.",
             fingers: { thumb: "Holding Ring & Pinky", index: "Extended Up ✌️", middle: "Extended Up ✌️", ring: "Folded ✊", pinky: "Folded ✊" },
             steps: [
@@ -384,14 +384,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Hold thumb over the folded ring finger."
             ]
         },
-        { 
-            name: "THREE", 
-            category: "Numbers", 
-            icon: "fa-hand-dots", 
+        {
+            name: "THREE",
+            category: "Numbers",
+            icon: "fa-hand-dots",
             handPose: "w_water",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "Thumb + Index + Middle", 
+            motionClass: "anim-human-pulse",
+            handGuide: "Thumb + Index + Middle",
             desc: "ASL Number 3: Thumb, Index, and Middle fingers extended, Ring and Pinky folded.",
             fingers: { thumb: "Extended Outward", index: "Extended Up ☝️", middle: "Extended Up ☝️", ring: "Folded ✊", pinky: "Folded ✊" },
             steps: [
@@ -400,14 +400,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Hold steady facing camera to represent the number 3."
             ]
         },
-        { 
-            name: "FOUR", 
-            category: "Numbers", 
-            icon: "fa-hand", 
+        {
+            name: "FOUR",
+            category: "Numbers",
+            icon: "fa-hand",
             handPose: "number_four",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "4 Fingers Extended", 
+            motionClass: "anim-human-pulse",
+            handGuide: "4 Fingers Extended",
             desc: "Index, Middle, Ring, and Pinky fingers extended upward, thumb folded across palm.",
             fingers: { thumb: "Folded Across Palm", index: "Extended Up", middle: "Extended Up", ring: "Extended Up", pinky: "Extended Up" },
             steps: [
@@ -416,14 +416,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Face palm forward towards camera."
             ]
         },
-        { 
-            name: "FIVE", 
-            category: "Numbers", 
-            icon: "fa-hand", 
+        {
+            name: "FIVE",
+            category: "Numbers",
+            icon: "fa-hand",
             handPose: "number_five",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "All 5 Fingers Spread 🖐️", 
+            motionClass: "anim-human-pulse",
+            handGuide: "All 5 Fingers Spread 🖐️",
             desc: "All five fingers open, extended, and spread comfortably facing camera.",
             fingers: { thumb: "Extended", index: "Extended", middle: "Extended", ring: "Extended", pinky: "Extended" },
             steps: [
@@ -434,14 +434,14 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         // --- Alphabets ---
-        { 
-            name: "ALPHABET A", 
-            category: "Alphabet", 
-            icon: "fa-font", 
+        {
+            name: "ALPHABET A",
+            category: "Alphabet",
+            icon: "fa-font",
             handPose: "alpha_a",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "Fist With Vertical Side Thumb", 
+            motionClass: "anim-human-pulse",
+            handGuide: "Fist With Vertical Side Thumb",
             desc: "Closed fist with all 4 fingers curled down and thumb standing vertically along the side of index finger.",
             fingers: { thumb: "Upright Along Index Side", index: "Folded ✊", middle: "Folded ✊", ring: "Folded ✊", pinky: "Folded ✊" },
             steps: [
@@ -450,14 +450,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Hold hand steady facing forward towards camera."
             ]
         },
-        { 
-            name: "ALPHABET B", 
-            category: "Alphabet", 
-            icon: "fa-hand", 
+        {
+            name: "ALPHABET B",
+            category: "Alphabet",
+            icon: "fa-hand",
             handPose: "alpha_b",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "4 Fingers Flat Together", 
+            motionClass: "anim-human-pulse",
+            handGuide: "4 Fingers Flat Together",
             desc: "Four fingers extended straight up pressed tightly together, thumb tucked across front of palm.",
             fingers: { thumb: "Tucked Across Palm", index: "Extended Flat 🖐️", middle: "Extended Flat 🖐️", ring: "Extended Flat 🖐️", pinky: "Extended Flat 🖐️" },
             steps: [
@@ -466,14 +466,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Hold flat hand facing directly forward."
             ]
         },
-        { 
-            name: "ALPHABET C", 
-            category: "Alphabet", 
-            icon: "fa-copyright", 
+        {
+            name: "ALPHABET C",
+            category: "Alphabet",
+            icon: "fa-copyright",
             handPose: "alpha_c",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "Curved 'C' Hand Arc", 
+            motionClass: "anim-human-pulse",
+            handGuide: "Curved 'C' Hand Arc",
             desc: "All fingers curved upward and thumb curved downward forming an unmistakable 'C' arc.",
             fingers: { thumb: "Curved Downward 🌙", index: "Curved Upward 🌙", middle: "Curved Upward 🌙", ring: "Curved Upward 🌙", pinky: "Curved Upward 🌙" },
             steps: [
@@ -482,14 +482,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Hold hand slightly angled so camera sees the clear 'C' contour."
             ]
         },
-        { 
-            name: "ALPHABET D", 
-            category: "Alphabet", 
-            icon: "fa-font", 
+        {
+            name: "ALPHABET D",
+            category: "Alphabet",
+            icon: "fa-font",
             handPose: "alpha_d",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "Index Up, Others Touch Thumb", 
+            motionClass: "anim-human-pulse",
+            handGuide: "Index Up, Others Touch Thumb",
             desc: "Index finger points straight up while thumb touches middle, ring, and pinky fingertips forming a circle.",
             fingers: { thumb: "Touching Other Fingertips", index: "Extended Straight Up ☝️", middle: "Curled to Thumb ⭕", ring: "Curled to Thumb ⭕", pinky: "Curled to Thumb ⭕" },
             steps: [
@@ -498,14 +498,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Make sure the circular loop and upright index finger are clearly visible."
             ]
         },
-        { 
-            name: "ALPHABET E", 
-            category: "Alphabet", 
-            icon: "fa-font", 
+        {
+            name: "ALPHABET E",
+            category: "Alphabet",
+            icon: "fa-font",
             handPose: "alpha_e",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "Curled Fingers Over Thumb", 
+            motionClass: "anim-human-pulse",
+            handGuide: "Curled Fingers Over Thumb",
             desc: "All four fingers tightly bent/curled down at knuckles with thumb tucked under the fingertips.",
             fingers: { thumb: "Tucked Under Fingertips", index: "Curled Down ✊", middle: "Curled Down ✊", ring: "Curled Down ✊", pinky: "Curled Down ✊" },
             steps: [
@@ -514,14 +514,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Face your palm forward towards the camera."
             ]
         },
-        { 
-            name: "ALPHABET I", 
-            category: "Alphabet", 
-            icon: "fa-font", 
+        {
+            name: "ALPHABET I",
+            category: "Alphabet",
+            icon: "fa-font",
             handPose: "alpha_i",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "Pinky Extended Straight Up", 
+            motionClass: "anim-human-pulse",
+            handGuide: "Pinky Extended Straight Up",
             desc: "Only Pinky finger extended straight up, remaining three fingers and thumb folded into a fist.",
             fingers: { thumb: "Locked Over Folded Fingers", index: "Folded ✊", middle: "Folded ✊", ring: "Folded ✊", pinky: "Extended Straight Up 🤙" },
             steps: [
@@ -530,14 +530,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Extend your Pinky finger straight up vertically."
             ]
         },
-        { 
-            name: "ALPHABET L", 
-            category: "Alphabet", 
-            icon: "fa-hand-lizard", 
+        {
+            name: "ALPHABET L",
+            category: "Alphabet",
+            icon: "fa-hand-lizard",
             handPose: "alpha_l",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "Thumb & Index Form 'L'", 
+            motionClass: "anim-human-pulse",
+            handGuide: "Thumb & Index Form 'L'",
             desc: "Index finger extended straight up and thumb extended out horizontally at a 90-degree angle.",
             fingers: { thumb: "Extended 90-Deg Out 👈", index: "Extended Straight Up ☝️", middle: "Folded ✊", ring: "Folded ✊", pinky: "Folded ✊" },
             steps: [
@@ -546,14 +546,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Keep Middle, Ring, and Pinky fingers folded into palm."
             ]
         },
-        { 
-            name: "ALPHABET O / ZERO", 
-            category: "Alphabet", 
-            icon: "fa-circle-notch", 
+        {
+            name: "ALPHABET O / ZERO",
+            category: "Alphabet",
+            icon: "fa-circle-notch",
             handPose: "alpha_o",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "Fingertips Touching Thumb in 'O'", 
+            motionClass: "anim-human-pulse",
+            handGuide: "Fingertips Touching Thumb in 'O'",
             desc: "All fingertips curved together touching the thumb tip to form a round 'O' shape.",
             fingers: { thumb: "Touching All Fingertips", index: "Curved into O ⭕", middle: "Curved into O ⭕", ring: "Curved into O ⭕", pinky: "Curved into O ⭕" },
             steps: [
@@ -562,14 +562,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Hold hand steady facing camera."
             ]
         },
-        { 
-            name: "ALPHABET U", 
-            category: "Alphabet", 
-            icon: "fa-font", 
+        {
+            name: "ALPHABET U",
+            category: "Alphabet",
+            icon: "fa-font",
             handPose: "alpha_u",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "Index & Middle Together", 
+            motionClass: "anim-human-pulse",
+            handGuide: "Index & Middle Together",
             desc: "Index and Middle fingers extended straight up pressed tightly together (unlike V which is spread).",
             fingers: { thumb: "Holding Ring & Pinky", index: "Extended Together ☝️", middle: "Extended Together ☝️", ring: "Folded ✊", pinky: "Folded ✊" },
             steps: [
@@ -578,14 +578,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Fold Ring and Pinky into palm and hold with thumb."
             ]
         },
-        { 
-            name: "ALPHABET X", 
-            category: "Alphabet", 
-            icon: "fa-font", 
+        {
+            name: "ALPHABET X",
+            category: "Alphabet",
+            icon: "fa-font",
             handPose: "alpha_x",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "Hooked Index Finger", 
+            motionClass: "anim-human-pulse",
+            handGuide: "Hooked Index Finger",
             desc: "Index finger hooked/bent into a curve, other fingers folded into palm.",
             fingers: { thumb: "Holding Folded Fingers", index: "Hooked / Bent 🪝", middle: "Folded ✊", ring: "Folded ✊", pinky: "Folded ✊" },
             steps: [
@@ -594,14 +594,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Hold hand steady facing camera."
             ]
         },
-        { 
-            name: "ALPHABET Y", 
-            category: "Alphabet", 
-            icon: "fa-hand-spock", 
+        {
+            name: "ALPHABET Y",
+            category: "Alphabet",
+            icon: "fa-hand-spock",
             handPose: "alpha_y",
             bodyPosition: "Front of Camera",
-            motionClass: "anim-human-pulse", 
-            handGuide: "Thumb & Pinky Extended Wide", 
+            motionClass: "anim-human-pulse",
+            handGuide: "Thumb & Pinky Extended Wide",
             desc: "Thumb and Pinky fingers extended outwards in opposite directions (Shaka / Call Me sign).",
             fingers: { thumb: "Extended Out 🤙", index: "Folded ✊", middle: "Folded ✊", ring: "Folded ✊", pinky: "Extended Out 🤙" },
             steps: [
@@ -615,56 +615,97 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
     // 2. Real Photorealistic Hand Model Renderer (Zero Cartoon Hands)
     // =========================================================================
-    window.getHandOrientation = function(item) {
-        if (!item) return { view: 'palmar', image: 'assets/hand_palmar.png', label: 'Palm View', icon: 'fa-regular fa-hand' };
+    // Helper to map each sign to its corresponding 3D claymorphic hand model photo
+    window.getSign3DPhoto = function (item) {
+        if (!item) return 'assets/icon_3d_hello.png';
         const name = (item.name || '').toUpperCase();
         const pose = (item.handPose || '').toLowerCase();
-        
-        // Signs where the back of the hand or closed fist faces the camera/viewer:
-        const isDorsal = name.includes('YES') || 
-                         name.includes('NO') || 
-                         name.includes('ROCK') || 
-                         name === 'ALPHABET A' || 
-                         name === 'ALPHABET E' || 
-                         name === 'ALPHABET M' || 
-                         name === 'ALPHABET N' || 
-                         name === 'ALPHABET O' || 
-                         name === 'ALPHABET S' || 
-                         name === 'ALPHABET T' || 
-                         pose === 'fist' || 
-                         pose === 'rock_horns' || 
-                         pose === 'alphabet_a';
 
-        if (isDorsal) {
-            return {
-                view: 'dorsal',
-                image: 'assets/hand_dorsal.png',
-                label: 'Back View',
-                icon: 'fa-solid fa-hand'
-            };
+        if (name.includes('THUMBS UP') || (name.includes('YES') && !name.includes('NO'))) {
+            return 'assets/icon_3d_thumbs_up.png';
+        }
+        if (name.includes('THUMBS DOWN') || name === 'NO') {
+            return 'assets/icon_3d_thumbs_down.png';
+        }
+        if (name.includes('PEACE') || name.includes('VICTORY') || name === 'TWO' || pose === 'peace_v') {
+            return 'assets/icon_3d_peace.png';
+        }
+        if (name.includes('POINT') || name === 'ONE' || pose === 'point_one') {
+            return 'assets/icon_3d_point.png';
+        }
+        if (name.includes('HI') || name.includes('HELLO') || name.includes('GOOD') || name.includes('FINE') || name === 'FIVE') {
+            return 'assets/icon_3d_hello.png';
+        }
+        if (name.includes('STOP') || name.includes('FIST') || name === 'ALPHABET A' || name === 'ALPHABET S' || name === 'SORRY' || pose === 'fist_stop') {
+            return 'assets/icon_3d_fist.png';
+        }
+        if (name.includes('OK') || name === 'ALPHABET F' || pose === 'ok_sign') {
+            return 'assets/icon_3d_ok.png';
+        }
+        if (name.includes('LOVE') || pose === 'i_love_you') {
+            return 'assets/icon_3d_ily.png';
+        }
+        if (name.includes('WATER') || name === 'ALPHABET W' || name === 'THREE' || pose === 'w_water') {
+            return 'assets/icon_3d_water.png';
+        }
+        if (name.includes('HELP') || pose === 'help') {
+            return 'assets/icon_3d_help.png';
+        }
+        if (name.includes('ROCK') || name.includes('METAL') || pose === 'rock_metal') {
+            return 'assets/icon_3d_rock.png';
+        }
+        if (name === 'ALPHABET Y' || name.includes('SHAKA') || name.includes('CALL') || pose === 'alpha_y') {
+            return 'assets/icon_3d_shaka.png';
+        }
+        if (name.includes('THANK') || name === 'ALPHABET B' || name === 'FOUR' || name.includes('PLEASE')) {
+            return 'assets/icon_3d_flat.png';
         }
 
-        // All other signs face palm-forward towards viewer or chin/mouth:
+        // Fallback standard 3D hand icon
+        return 'assets/icon_3d_hello.png';
+    };
+
+    window.getSign3DBanner = function (item) {
+        if (!item) return 'assets/banner_3d_hello.png';
+        const photo = window.getSign3DPhoto(item);
+        return photo.replace('icon_3d_', 'banner_3d_');
+    };
+
+    window.getHandOrientation = function (item) {
+        if (!item) return { view: 'palmar', image: 'assets/icon_3d_hello.png', label: 'Palm View', icon: 'fa-regular fa-hand' };
+        const name = (item.name || '').toUpperCase();
+        const pose = (item.handPose || '').toLowerCase();
+        const photo3D = window.getSign3DPhoto(item);
+
+        // Signs where back of hand or closed fist faces viewer:
+        const isDorsal = name.includes('YES') ||
+            name.includes('NO') ||
+            name.includes('ROCK') ||
+            name === 'ALPHABET A' ||
+            name === 'ALPHABET E' ||
+            name === 'ALPHABET S' ||
+            pose === 'fist';
+
         return {
-            view: 'palmar',
-            image: 'assets/hand_palmar.png',
-            label: 'Palm View',
-            icon: 'fa-regular fa-hand'
+            view: isDorsal ? 'dorsal' : 'palmar',
+            image: photo3D,
+            label: isDorsal ? 'Back View' : 'Front View',
+            icon: isDorsal ? 'fa-solid fa-hand' : 'fa-regular fa-hand'
         };
     };
 
-    window.renderRealPhotoHand = function(item, isMini = false, speedClass = '') {
+    window.renderRealPhotoHand = function (item, isMini = false, speedClass = '') {
         if (!item) return '';
         const orientation = window.getHandOrientation(item);
         const name = (item.name || '').toUpperCase();
         const motion = item.motionClass || 'anim-real-pulse';
+        const photo3D = window.getSign3DPhoto(item);
 
         // 1. Mini Preview for Reference Catalog Cards & Right Drawer Grid
         if (isMini) {
             return `
-            <div class="mini-real-hand-preview" title="${item.name}: ${orientation.label}">
-                <img src="${orientation.image}" alt="${item.name} Hand Model" class="mini-real-hand-img" />
-                <span class="mini-orientation-tag">${orientation.view === 'palmar' ? 'Palm' : 'Back'}</span>
+            <div class="mini-real-hand-preview" title="${item.name}: 3D Hand Model">
+                <img src="${photo3D}" alt="${item.name} 3D Hand Sign" class="mini-real-hand-img" />
             </div>`;
         }
 
@@ -790,7 +831,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             if (handCountLabel) handCountLabel.textContent = "Requesting Webcam...";
-            
+
             mediaStream = await navigator.mediaDevices.getUserMedia({
                 video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: "user" },
                 audio: false
@@ -885,8 +926,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (handCountLabel) handCountLabel.textContent = `${numHands} Hand${numHands > 1 ? 's' : ''} Detected`;
 
             const primaryLandmarks = results.multiHandLandmarks[0];
-            const handScore = results.multiHandedness && results.multiHandedness[0] 
-                ? Math.round(results.multiHandedness[0].score * 100) 
+            const handScore = results.multiHandedness && results.multiHandedness[0]
+                ? Math.round(results.multiHandedness[0].score * 100)
                 : 96;
             if (confidenceLabel) confidenceLabel.textContent = `Confidence: ${handScore}%`;
 
@@ -1144,7 +1185,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addHistoryRecord(signName, confidence) {
         const timeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        
+
         sqlRecordCount += 1;
         mongoRecordCount += 30;
         if (statSqlCount) statSqlCount.textContent = sqlRecordCount.toLocaleString();
@@ -1255,13 +1296,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // 6. Real Human Sign Instructor Modal Controller
     // =========================================================================
     function openHandGuideModal(item) {
-        if (!modalHandGuide) return;
+        if (!modalHandGuide || !item) return;
         activeGuideSign = item;
 
         if (guideModalTitle) guideModalTitle.textContent = `How to Form Sign: ${item.name}`;
         if (guideCategoryBadge) guideCategoryBadge.textContent = item.category;
 
-        // Render Realistic Animated Human Demonstrator
+        // Render 3D Sign Photo in Modal Stage
         renderInstructorStage(item);
 
         // Update Finger Checklist
@@ -1284,118 +1325,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const steps = item.steps || [
             "Position your hand clearly in front of the camera.",
-            "Form the exact finger configuration shown in the human animation.",
+            "Form the exact finger configuration shown in the reference photo.",
             "Hold steady for 0.5 seconds to trigger auto-translation and voice speech."
         ];
         if (guideStepsList) {
             guideStepsList.innerHTML = steps.map(st => `<li>${st}</li>`).join('');
         }
 
-        setInstructorTab('human');
         modalHandGuide.classList.add('active');
     }
 
     function renderInstructorStage(item) {
-        if (!guideHumanStage) return;
+        const photoStage = document.getElementById('guide-photo-stage') || guideHumanStage;
+        if (!photoStage || !item) return;
 
-        const speedClass = instructorSpeed === 'slow-motion' ? 'slow-motion' : '';
-        const bodyPos = item.bodyPosition || 'Front of Camera';
-        const bodyTag = `<div class="body-placement-indicator"><i class="fa-solid fa-location-dot"></i> ${bodyPos}</div>`;
-        const orientation = window.getHandOrientation ? window.getHandOrientation(item) : { label: 'Front View', view: 'palmar' };
+        const photo3d = window.getSign3DPhoto ? window.getSign3DPhoto(item) : 'assets/icon_3d_hello.png';
 
-        guideHumanStage.innerHTML = `
-            ${bodyTag}
-            <div class="threed-drag-hint">
-                <i class="fa-solid fa-arrows-spin"></i> 360° Drag
+        photoStage.innerHTML = `
+            <div class="modal-photo-img-wrap">
+                <img src="${photo3d}" alt="${item.name} 3D Hand Sign" class="modal-photo-main-img" />
             </div>
-            <div id="hand-3d-viewport" class="hand-3d-viewport"></div>
-            <div class="threed-camera-pills">
-                <button type="button" class="threed-cam-btn ${orientation.view === 'palmar' ? 'active' : ''}" id="btn-cam-front" title="Front (Palm) View">
-                    <i class="fa-regular fa-hand"></i> Front
-                </button>
-                <button type="button" class="threed-cam-btn ${orientation.view === 'dorsal' ? 'active' : ''}" id="btn-cam-back" title="Back (Dorsal) View">
-                    <i class="fa-solid fa-hand"></i> Back
-                </button>
-                <button type="button" class="threed-cam-btn" id="btn-cam-iso" title="3D Perspective Angle">
-                    <i class="fa-solid fa-cube"></i> 3D Angle
-                </button>
+            <div class="modal-photo-caption">
+                <span class="modal-photo-caption-title"><i class="fa-solid fa-cube"></i> ${item.name}</span>
+                <span class="modal-photo-caption-tag">${item.category || 'ASL Sign'}</span>
             </div>
         `;
-
-        const viewport = document.getElementById('hand-3d-viewport');
-        if (viewport && window.Hand3D) {
-            window.Hand3D.init(viewport);
-            window.Hand3D.displaySign(item, speedClass);
-
-            const btnCamFront = document.getElementById('btn-cam-front');
-            const btnCamBack = document.getElementById('btn-cam-back');
-            const btnCamIso = document.getElementById('btn-cam-iso');
-
-            const setCamBtnActive = (activeBtn) => {
-                [btnCamFront, btnCamBack, btnCamIso].forEach(b => { if (b) b.classList.remove('active'); });
-                if (activeBtn) activeBtn.classList.add('active');
-            };
-
-            if (btnCamFront) btnCamFront.addEventListener('click', (e) => {
-                e.stopPropagation();
-                setCamBtnActive(btnCamFront);
-                window.Hand3D.setCameraView('front');
-            });
-
-            if (btnCamBack) btnCamBack.addEventListener('click', (e) => {
-                e.stopPropagation();
-                setCamBtnActive(btnCamBack);
-                window.Hand3D.setCameraView('back');
-            });
-
-            if (btnCamIso) btnCamIso.addEventListener('click', (e) => {
-                e.stopPropagation();
-                setCamBtnActive(btnCamIso);
-                window.Hand3D.setCameraView('iso');
-            });
-        } else if (viewport && window.renderRealPhotoHand) {
-            viewport.innerHTML = window.renderRealPhotoHand(item, false, speedClass);
-        }
-
-        // Also draw skeleton canvas
-        if (guideSkeletonCanvas) {
-            drawLandmarkSkeletonDiagram(guideSkeletonCanvas, item);
-        }
     }
 
-    // Modal tabs: 3D Hand Model vs Photo Model vs Keypoints
     function setInstructorTab(tab) {
-        instructorMode = tab;
-        [btnModeHuman, btnModePhoto, btnModeSkeleton].forEach(b => { if (b) b.classList.remove('active'); });
-        [guideHumanStage, guidePhotoWrapper, guideSkeletonWrapper].forEach(w => { if (w) w.classList.remove('active'); });
-
-        if (tab === 'human') {
-            if (btnModeHuman) btnModeHuman.classList.add('active');
-            if (guideHumanStage) guideHumanStage.classList.add('active');
-            if (window.Hand3D && activeGuideSign) {
-                setTimeout(() => {
-                    const viewport = document.getElementById('hand-3d-viewport');
-                    if (viewport && !viewport.querySelector('canvas')) {
-                        window.Hand3D.init(viewport);
-                        window.Hand3D.displaySign(activeGuideSign, instructorSpeed === 'slow-motion' ? 'slow-motion' : '');
-                    }
-                }, 50);
-            }
-        } else if (tab === 'photo') {
-            if (btnModePhoto) btnModePhoto.classList.add('active');
-            if (guidePhotoWrapper) guidePhotoWrapper.classList.add('active');
-        } else if (tab === 'skeleton') {
-            if (btnModeSkeleton) btnModeSkeleton.classList.add('active');
-            if (guideSkeletonWrapper) guideSkeletonWrapper.classList.add('active');
-            if (activeGuideSign && guideSkeletonCanvas) {
-                drawLandmarkSkeletonDiagram(guideSkeletonCanvas, activeGuideSign);
-            }
-        }
+        // No-op kept for backwards compatibility
     }
-
-    if (btnModeHuman) btnModeHuman.addEventListener('click', () => setInstructorTab('human'));
-    if (btnModePhoto) btnModePhoto.addEventListener('click', () => setInstructorTab('photo'));
-    if (btnModeSkeleton) btnModeSkeleton.addEventListener('click', () => setInstructorTab('skeleton'));
 
     // Playback Speed Controls
     if (btnSpeedNormal && btnSpeedSlow) {
@@ -1404,7 +1363,6 @@ document.addEventListener('DOMContentLoaded', () => {
             btnSpeedNormal.classList.add('active');
             btnSpeedSlow.classList.remove('active');
             if (window.Hand3D) window.Hand3D.playbackSpeed = 1.0;
-            if (activeGuideSign) renderInstructorStage(activeGuideSign);
         });
 
         btnSpeedSlow.addEventListener('click', () => {
@@ -1412,15 +1370,15 @@ document.addEventListener('DOMContentLoaded', () => {
             btnSpeedSlow.classList.add('active');
             btnSpeedNormal.classList.remove('active');
             if (window.Hand3D) window.Hand3D.playbackSpeed = 0.5;
-            if (activeGuideSign) renderInstructorStage(activeGuideSign);
         });
     }
 
     // Replay Animation
     if (btnReplayAnim) {
         btnReplayAnim.addEventListener('click', () => {
-            if (activeGuideSign) {
-                if (window.Hand3D) window.Hand3D.displaySign(activeGuideSign, instructorSpeed === 'slow-motion' ? 'slow-motion' : '');
+            if (window.Hand3D) {
+                window.Hand3D.replaySign();
+            } else if (activeGuideSign) {
                 renderInstructorStage(activeGuideSign);
             }
         });
@@ -1437,54 +1395,78 @@ document.addEventListener('DOMContentLoaded', () => {
         const catalog = window.dictionaryData || [];
         const filtered = catalog.filter(item => {
             const matchesCategory = filterCategory === 'all' || item.category === filterCategory;
-            const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                                  item.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                  item.category.toLowerCase().includes(searchQuery.toLowerCase());
+            const matchesSearch = !searchQuery || 
+                item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (item.desc && item.desc.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                (item.category && item.category.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                (item.handGuide && item.handGuide.toLowerCase().includes(searchQuery.toLowerCase()));
             return matchesCategory && matchesSearch;
         });
 
+        const badge = document.getElementById('library-count-badge');
+        if (badge) badge.textContent = `${filtered.length}`;
+
         if (filtered.length === 0) {
-            grid.innerHTML = `<div class="no-data-row" style="grid-column: 1/-1;"><p>No signs found matching search.</p></div>`;
+            grid.innerHTML = `<div class="no-data-row" style="grid-column: 1/-1; padding: 24px; text-align: center;"><p style="color: var(--text-dim);"><i class="fa-solid fa-magnifying-glass" style="margin-right: 6px;"></i>No signs found matching "${searchQuery}".</p></div>`;
             return;
         }
 
         filtered.forEach((item, idx) => {
             const card = document.createElement('div');
-            card.className = 'side-sign-card glass-panel';
+            card.className = 'side-sign-card';
             const cleanGuide = (item.handGuide || 'Hand Gesture').replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim();
+            const photo3d = window.getSign3DPhoto ? window.getSign3DPhoto(item) : 'assets/icon_3d_hello.png';
+
+            // Map category to CSS class for styled tags
+            let catClass = 'cat-common';
+            const catLower = (item.category || '').toLowerCase();
+            if (catLower.includes('emergency')) catClass = 'cat-emergency';
+            else if (catLower.includes('greet')) catClass = 'cat-greetings';
+            else if (catLower.includes('need')) catClass = 'cat-needs';
+            else if (catLower.includes('expression')) catClass = 'cat-expressions';
+            else if (catLower.includes('alpha')) catClass = 'cat-alphabet';
+            else if (catLower.includes('number')) catClass = 'cat-numbers';
 
             card.innerHTML = `
                 <div class="card-visual-header">
-                    <div class="card-human-preview" title="Real hand posture demo">
-                        ${window.renderRealPhotoHand(item, true)}
+                    <div class="mini-real-hand-preview" title="${item.name}: 3D Hand Model">
+                        <img src="${photo3d}" alt="${item.name}" class="mini-real-hand-img" />
                     </div>
                     <div class="card-title-box">
-                        <div>
-                            <h3>${item.name}</h3>
-                            <span class="badge badge-mode">${item.category}</span>
-                        </div>
+                        <h3>${item.name}</h3>
+                        <span class="cat-tag ${catClass}">${item.category}</span>
                     </div>
                 </div>
 
                 <div class="hand-guide-pill">
-                    <i class="fa-solid ${item.icon}"></i> <span>Position: <strong>${cleanGuide}</strong></span>
+                    <i class="fa-solid ${item.icon || 'fa-hand'}"></i>
+                    <span>Position: <strong>${cleanGuide}</strong></span>
                 </div>
 
                 <p class="sign-card-desc">${item.desc}</p>
 
                 <div class="sign-card-actions-row">
-                    <button class="btn btn-sm btn-secondary btn-open-hand-demo" data-index="${idx}">
-                        <i class="fa-solid fa-hand"></i> Real Hand Demo
+                    <button class="btn btn-sm btn-secondary btn-open-hand-demo" data-index="${idx}" title="Open 3D Gesture Guide">
+                        <i class="fa-solid fa-hand"></i> 3D Guide
                     </button>
-                    <button class="btn btn-sm btn-primary btn-test-hand-sign" data-sign="${item.name}" data-category="${item.category}" data-icon="${item.icon}">
+                    <button class="btn btn-sm btn-primary btn-test-hand-sign" data-sign="${item.name}" data-category="${item.category}" data-icon="${item.icon || 'fa-hand'}" title="Test sign in live camera">
                         <i class="fa-solid fa-play"></i> Test Sign
                     </button>
                 </div>
             `;
+
+            // Clicking card background also previews sign
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('button')) return;
+                const mockSign = { name: item.name, category: item.category, icon: item.icon || 'fa-hand', confidence: 98 };
+                updateRecognitionUI(mockSign, 98);
+                confirmSignToSentence(mockSign, 98);
+            });
+
             grid.appendChild(card);
         });
 
-        document.querySelectorAll('.btn-open-hand-demo').forEach(btn => {
+        grid.querySelectorAll('.btn-open-hand-demo').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const index = parseInt(btn.getAttribute('data-index'), 10);
@@ -1493,7 +1475,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        document.querySelectorAll('.btn-test-hand-sign').forEach(btn => {
+        grid.querySelectorAll('.btn-test-hand-sign').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const signName = btn.getAttribute('data-sign');
@@ -1507,9 +1489,72 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Connect Search & Category Filter Pills for Reference Library
+    const dictSearch = document.getElementById('dict-search');
+    const categoryPills = document.getElementById('category-pills');
+    let currentCategoryFilter = 'all';
+
+    if (dictSearch) {
+        dictSearch.addEventListener('input', (e) => {
+            renderVisualHandGrid(currentCategoryFilter, e.target.value.trim());
+        });
+    }
+
+    if (categoryPills) {
+        categoryPills.addEventListener('click', (e) => {
+            const pill = e.target.closest('.pill');
+            if (!pill) return;
+            categoryPills.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            currentCategoryFilter = pill.getAttribute('data-category') || 'all';
+            renderVisualHandGrid(currentCategoryFilter, dictSearch ? dictSearch.value.trim() : '');
+        });
+    }
+
+    // Show / Hide Reference Library Panel
+    const btnCloseLibrary = document.getElementById('btn-close-library');
+    const btnToggleLibraryToolbar = document.getElementById('btn-toggle-library-toolbar');
+    const libraryToolbarText = document.getElementById('library-toolbar-text');
+    const catalogSidePanel = document.getElementById('catalog-side-panel');
+    const mainWorkspace = document.querySelector('.unified-workspace');
+
+    function toggleLibraryPanel(forceState) {
+        if (!catalogSidePanel || !mainWorkspace) return;
+        const willHide = forceState !== undefined ? !forceState : !catalogSidePanel.classList.contains('is-hidden');
+
+        if (willHide) {
+            catalogSidePanel.classList.add('is-hidden');
+            mainWorkspace.classList.add('library-hidden');
+            if (btnToggleLibraryToolbar) btnToggleLibraryToolbar.classList.remove('active');
+            if (libraryToolbarText) libraryToolbarText.textContent = 'Library: OFF';
+        } else {
+            catalogSidePanel.classList.remove('is-hidden');
+            mainWorkspace.classList.remove('library-hidden');
+            if (btnToggleLibraryToolbar) btnToggleLibraryToolbar.classList.add('active');
+            if (libraryToolbarText) libraryToolbarText.textContent = 'Library: ON';
+        }
+    }
+
+    if (btnCloseLibrary) {
+        btnCloseLibrary.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleLibraryPanel(false); // Hide panel
+        });
+    }
+
+    if (btnToggleLibraryToolbar) {
+        btnToggleLibraryToolbar.classList.add('active');
+        btnToggleLibraryToolbar.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleLibraryPanel(); // Toggle state
+        });
+    }
+
     // Modal Guide Actions
     if (btnCloseHandGuide && modalHandGuide) {
-        btnCloseHandGuide.addEventListener('click', () => modalHandGuide.classList.remove('active'));
+        btnCloseHandGuide.addEventListener('click', () => {
+            modalHandGuide.classList.remove('active');
+        });
     }
 
     if (btnGuideTryCamera) {
@@ -1599,7 +1644,9 @@ document.addEventListener('DOMContentLoaded', () => {
     [modalAnalytics, modalHandGuide].forEach(modal => {
         if (modal) {
             modal.addEventListener('click', (e) => {
-                if (e.target === modal) modal.classList.remove('active');
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
             });
         }
     });
@@ -1618,26 +1665,383 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Dictionary Filter & Search
-    const dictSearch = document.getElementById('dict-search');
-    const categoryPills = document.getElementById('category-pills');
+    // =========================================================================
+    // 8. Sign Language Translator - Hero Hand Stage & Demo Cards
+    // =========================================================================
+    
+    // Normalized 21-Landmark Keypoint Sets for Common ASL Hand Shapes (0 to 500 space)
+    const HERO_LANDMARK_POSES = {
+        'THUMBS UP': [
+            { x: 300, y: 390 }, // 0: Wrist
+            { x: 260, y: 310 }, { x: 250, y: 240 }, { x: 255, y: 170 }, { x: 255, y: 110 }, // 1-4: Thumb Up
+            { x: 220, y: 260 }, { x: 190, y: 270 }, { x: 170, y: 280 }, { x: 200, y: 290 }, // 5-8: Index Curled
+            { x: 215, y: 300 }, { x: 180, y: 310 }, { x: 165, y: 320 }, { x: 200, y: 330 }, // 9-12: Middle Curled
+            { x: 220, y: 340 }, { x: 185, y: 350 }, { x: 175, y: 360 }, { x: 205, y: 365 }, // 13-16: Ring Curled
+            { x: 235, y: 375 }, { x: 205, y: 385 }, { x: 195, y: 395 }, { x: 220, y: 395 }  // 17-20: Pinky Curled
+        ],
+        'HI / HELLO': [
+            { x: 250, y: 440 }, // 0: Wrist
+            { x: 320, y: 370 }, { x: 360, y: 320 }, { x: 390, y: 270 }, { x: 410, y: 230 }, // 1-4: Thumb Spread
+            { x: 220, y: 280 }, { x: 205, y: 210 }, { x: 195, y: 150 }, { x: 190, y: 100 }, // 5-8: Index Straight Up
+            { x: 250, y: 270 }, { x: 250, y: 190 }, { x: 250, y: 130 }, { x: 250, y: 80 },  // 9-12: Middle Straight Up
+            { x: 280, y: 280 }, { x: 295, y: 205 }, { x: 305, y: 145 }, { x: 310, y: 95 },  // 13-16: Ring Straight Up
+            { x: 310, y: 305 }, { x: 340, y: 245 }, { x: 360, y: 195 }, { x: 375, y: 150 }  // 17-20: Pinky Spread
+        ],
+        'I LOVE YOU': [
+            { x: 250, y: 440 }, // 0: Wrist
+            { x: 310, y: 360 }, { x: 345, y: 315 }, { x: 375, y: 265 }, { x: 400, y: 225 }, // 1-4: Thumb Extended
+            { x: 225, y: 290 }, { x: 210, y: 215 }, { x: 200, y: 150 }, { x: 190, y: 90 },  // 5-8: Index Extended
+            { x: 250, y: 290 }, { x: 250, y: 330 }, { x: 250, y: 355 }, { x: 250, y: 340 }, // 9-12: Middle Folded
+            { x: 275, y: 295 }, { x: 275, y: 335 }, { x: 275, y: 360 }, { x: 275, y: 345 }, // 13-16: Ring Folded
+            { x: 305, y: 310 }, { x: 320, y: 245 }, { x: 335, y: 185 }, { x: 345, y: 130 }  // 17-20: Pinky Extended
+        ],
+        'STOP / FIST': [
+            { x: 250, y: 440 }, // 0: Wrist
+            { x: 300, y: 340 }, { x: 280, y: 280 }, { x: 250, y: 270 }, { x: 230, y: 275 }, // 1-4: Thumb Locked Across
+            { x: 210, y: 300 }, { x: 200, y: 230 }, { x: 210, y: 190 }, { x: 225, y: 220 }, // 5-8: Index Curled
+            { x: 245, y: 295 }, { x: 245, y: 225 }, { x: 250, y: 185 }, { x: 250, y: 220 }, // 9-12: Middle Curled
+            { x: 275, y: 300 }, { x: 280, y: 230 }, { x: 280, y: 190 }, { x: 275, y: 225 }, // 13-16: Ring Curled
+            { x: 305, y: 315 }, { x: 315, y: 250 }, { x: 315, y: 215 }, { x: 305, y: 235 }  // 17-20: Pinky Curled
+        ]
+    };
 
-    if (dictSearch && categoryPills) {
-        dictSearch.addEventListener('input', (e) => {
-            const activePill = categoryPills.querySelector('.pill.active');
-            const cat = activePill ? activePill.getAttribute('data-category') : 'all';
-            renderVisualHandGrid(cat, e.target.value);
+    const SKELETON_EDGES = [
+        [0,1],[1,2],[2,3],[3,4], // Thumb
+        [0,5],[5,6],[6,7],[7,8], // Index
+        [5,9],[9,10],[10,11],[11,12], // Middle
+        [9,13],[13,14],[14,15],[15,16], // Ring
+        [13,17],[17,18],[18,19],[19,20], // Pinky
+        [0,17] // Palm Base
+    ];
+
+    function drawHeroLandmarkSvg(points) {
+        const svg = document.getElementById('hero-landmark-svg');
+        if (!svg || !points) return;
+        
+        let linesHtml = '';
+        SKELETON_EDGES.forEach(([i, j]) => {
+            const p1 = points[i];
+            const p2 = points[j];
+            if (p1 && p2) {
+                const isThumb = i <= 4 && j <= 4;
+                const cls = isThumb ? 'lm-edge lm-edge-accent' : 'lm-edge';
+                linesHtml += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" class="${cls}" />`;
+            }
         });
 
-        categoryPills.addEventListener('click', (e) => {
-            if (e.target.classList.contains('pill')) {
-                categoryPills.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-                e.target.classList.add('active');
-                const cat = e.target.getAttribute('data-category');
-                renderVisualHandGrid(cat, dictSearch.value);
+        let nodesHtml = '';
+        points.forEach((p, idx) => {
+            let cls = 'lm-node';
+            let r = 4.5;
+            if (idx === 0) { cls += ' lm-node-wrist'; r = 6.5; }
+            else if ([4, 8, 12, 16, 20].includes(idx)) { cls += ' lm-node-tip'; r = 5.5; }
+            nodesHtml += `<circle cx="${p.x}" cy="${p.y}" r="${r}" class="${cls}" />`;
+        });
+
+        svg.innerHTML = linesHtml + nodesHtml;
+    }
+
+    function initHeroHand3D() {
+        const heroHandImg = document.getElementById('hero-hand-img');
+        const heroDetName = document.getElementById('hero-detected-name');
+        const heroConfVal = document.getElementById('hero-conf-value');
+        const heroWaveform = document.getElementById('hero-waveform');
+        const quickSignBtns = document.querySelectorAll('.quick-sign-btn');
+        const btnToggleLandmarks = document.getElementById('btn-toggle-hero-landmarks');
+        const btnHeroPronounce = document.getElementById('btn-hero-pronounce');
+        const heroSvg = document.getElementById('hero-landmark-svg');
+
+        const HERO_SIGNS = [
+            {
+                signKey: 'THUMBS UP',
+                displayName: 'THUMBS UP',
+                conf: '98.6%',
+                cat: 'POSITIVE · READY',
+                img: 'assets/hero_asl_thumbsup.jpg'
+            },
+            {
+                signKey: 'HI / HELLO',
+                displayName: 'HELLO',
+                conf: '99.2%',
+                cat: 'WAVE · WELCOME',
+                img: 'assets/hero_asl_hello.jpg'
+            },
+            {
+                signKey: 'I LOVE YOU',
+                displayName: 'I LOVE YOU',
+                conf: '97.8%',
+                cat: 'CONNECT · EXPRESS',
+                img: 'assets/hero_asl_ily.jpg'
+            },
+            {
+                signKey: 'STOP / FIST',
+                displayName: 'AGAIN / FIST',
+                conf: '98.4%',
+                cat: 'CLOSED FIST · READY',
+                img: 'assets/hero_asl_fist.jpg'
             }
+        ];
+
+        let currentSignIndex = 0;
+        let showLandmarks = true;
+        let currentActiveSign = 'THUMBS UP';
+
+        function applyHeroSign(signObj, speak = true) {
+            if (!signObj) return;
+            currentActiveSign = signObj.displayName;
+
+            // Smooth image transition
+            if (heroHandImg) {
+                heroHandImg.style.opacity = '0.35';
+                heroHandImg.style.transform = 'scale(0.96)';
+                setTimeout(() => {
+                    heroHandImg.src = signObj.img;
+                    heroHandImg.style.opacity = '1';
+                    heroHandImg.style.transform = 'scale(1)';
+                }, 130);
+            }
+
+            // Update Neural Landmark Skeleton
+            const posePoints = HERO_LANDMARK_POSES[signObj.signKey] || HERO_LANDMARK_POSES['THUMBS UP'];
+            drawHeroLandmarkSvg(posePoints);
+
+            // Update HUD Telemetry
+            if (heroDetName) heroDetName.textContent = signObj.displayName;
+            if (heroConfVal) heroConfVal.textContent = signObj.conf;
+
+            // Highlight matching quick button in bottom dock
+            quickSignBtns.forEach(b => {
+                const bSign = b.getAttribute('data-sign');
+                b.classList.toggle('active', bSign === signObj.signKey);
+            });
+
+            // Voice feedback
+            if (speak && ttsEnabled) {
+                speakText(signObj.displayName);
+            }
+
+            // Waveform bounce
+            if (heroWaveform) {
+                heroWaveform.style.opacity = '1';
+            }
+
+            // Update live camera section detected translation
+            const mockSign = { name: signObj.signKey, category: signObj.cat, icon: 'fa-solid fa-hand' };
+            updateRecognitionUI(mockSign, parseInt(signObj.conf) || 98);
+        }
+
+        // Initial render: Thumbs Up
+        applyHeroSign(HERO_SIGNS[0], false);
+
+        // Click directly on the hand to cycle through signs!
+        const heroHandWrapper = document.getElementById('hero-hand-wrapper');
+        if (heroHandWrapper) {
+            heroHandWrapper.addEventListener('click', () => {
+                currentSignIndex = (currentSignIndex + 1) % HERO_SIGNS.length;
+                applyHeroSign(HERO_SIGNS[currentSignIndex], true);
+            });
+        }
+
+        // Toggle Landmarks Button
+        if (btnToggleLandmarks && heroSvg) {
+            btnToggleLandmarks.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showLandmarks = !showLandmarks;
+                btnToggleLandmarks.classList.toggle('active', showLandmarks);
+                btnToggleLandmarks.querySelector('span').textContent = `21 Keypoints: ${showLandmarks ? 'ON' : 'OFF'}`;
+                heroSvg.classList.toggle('hidden', !showLandmarks);
+            });
+        }
+
+        // Pronounce Audio Button
+        if (btnHeroPronounce) {
+            btnHeroPronounce.addEventListener('click', (e) => {
+                e.stopPropagation();
+                speakText(currentActiveSign);
+            });
+        }
+
+        // Quick Sign Switcher Dock buttons
+        quickSignBtns.forEach((btn, idx) => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const signKey = btn.getAttribute('data-sign') || 'THUMBS UP';
+                const foundIdx = HERO_SIGNS.findIndex(s => s.signKey === signKey);
+                if (foundIdx !== -1) {
+                    currentSignIndex = foundIdx;
+                    applyHeroSign(HERO_SIGNS[currentSignIndex], true);
+                } else {
+                    const customObj = {
+                        signKey: signKey,
+                        displayName: btn.getAttribute('data-display') || signKey,
+                        conf: btn.getAttribute('data-conf') || '98.6%',
+                        cat: btn.getAttribute('data-cat') || 'Gesture',
+                        img: btn.getAttribute('data-img') || 'assets/hero_asl_thumbsup.jpg'
+                    };
+                    applyHeroSign(customObj, true);
+                }
+            });
+        });
+
+        // Try with Camera CTA - Smooth Scroll & Auto Start
+        const btnHeroTryCamera = document.getElementById('btn-hero-try-camera');
+        if (btnHeroTryCamera) {
+            btnHeroTryCamera.addEventListener('click', (e) => {
+                e.preventDefault();
+                const camSection = document.getElementById('camera-section');
+                if (camSection) {
+                    camSection.scrollIntoView({ behavior: 'smooth' });
+                }
+                if (!isCameraActive) {
+                    setTimeout(() => {
+                        startCamera();
+                    }, 500);
+                }
+            });
+        }
+    }
+
+    // Render "A little practice goes a long way" Demo Cards Grid (Matching reference 2)
+    function renderDemoCardsGrid() {
+        const grid = document.getElementById('demo-cards-grid');
+        if (!grid) return;
+
+        const demoItems = [
+            {
+                letter: 'A',
+                name: 'again',
+                signKey: 'STOP / FIST',
+                desc: 'closed hand · thumb rests on side',
+                img: 'assets/hero_asl_fist.jpg',
+                heroPose: 'STOP / FIST'
+            },
+            {
+                letter: 'B',
+                name: 'hello',
+                signKey: 'HI / HELLO',
+                desc: 'open palm · fingers together',
+                img: 'assets/hero_asl_hello.jpg',
+                heroPose: 'HI / HELLO'
+            },
+            {
+                letter: 'C',
+                name: 'connect',
+                signKey: 'OK SIGN / F',
+                desc: 'curved fingers · soft C shape',
+                img: 'assets/sign_ok.jpg',
+                heroPose: 'STOP / FIST'
+            },
+            {
+                letter: 'I',
+                name: 'i love you',
+                signKey: 'I LOVE YOU',
+                desc: 'pinky raised · palm forward',
+                img: 'assets/hero_asl_ily.jpg',
+                heroPose: 'I LOVE YOU'
+            },
+            {
+                letter: 'D',
+                name: 'thumbs up',
+                signKey: 'THUMBS UP',
+                desc: 'upright thumb · positive ready',
+                img: 'assets/hero_asl_thumbsup.jpg',
+                heroPose: 'THUMBS UP'
+            },
+            {
+                letter: 'E',
+                name: 'thumbs down',
+                signKey: 'THUMBS DOWN',
+                desc: 'downward thumb · rejection ready',
+                img: 'assets/icon_3d_thumbs_down.png',
+                heroPose: 'THUMBS UP'
+            },
+            {
+                letter: 'F',
+                name: 'peace',
+                signKey: 'PEACE / VICTORY / V',
+                desc: 'index & middle extended · victory',
+                img: 'assets/icon_3d_peace.png',
+                heroPose: 'HI / HELLO'
+            },
+            {
+                letter: 'G',
+                name: 'point',
+                signKey: 'POINT / ONE',
+                desc: 'index finger · directional',
+                img: 'assets/icon_3d_point.png',
+                heroPose: 'THUMBS UP'
+            }
+        ];
+
+        grid.innerHTML = '';
+        demoItems.forEach((item) => {
+            const card = document.createElement('div');
+            card.className = 'demo-sign-card';
+            card.setAttribute('data-sign', item.signKey);
+            card.innerHTML = `
+                <div class="demo-card-stage">
+                    <span class="card-letter-badge">${item.letter}</span>
+                    <img src="${item.img}" alt="${item.name} ASL sign" class="demo-card-img" />
+                </div>
+                <div class="demo-card-body">
+                    <div class="demo-card-text">
+                        <h4 class="demo-card-title">${item.name}</h4>
+                        <p class="demo-card-desc">${item.desc}</p>
+                    </div>
+                    <span class="demo-card-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+                </div>
+            `;
+
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.demo-sign-card').forEach(c => c.classList.remove('active-sign'));
+                card.classList.add('active-sign');
+
+                // Update Hero Stage Hand & Skeleton
+                const heroHandImg = document.getElementById('hero-hand-img');
+                const heroDetName = document.getElementById('hero-detected-name');
+                const heroConfVal = document.getElementById('hero-conf-value');
+
+                if (heroHandImg) {
+                    heroHandImg.style.opacity = '0.3';
+                    setTimeout(() => {
+                        heroHandImg.src = item.img;
+                        heroHandImg.style.opacity = '1';
+                    }, 120);
+                }
+
+                const pose = HERO_LANDMARK_POSES[item.heroPose] || HERO_LANDMARK_POSES['THUMBS UP'];
+                drawHeroLandmarkSvg(pose);
+
+                if (heroDetName) heroDetName.textContent = item.name.toUpperCase();
+                if (heroConfVal) heroConfVal.textContent = '99.1%';
+
+                // Voice Speech
+                if (ttsEnabled) {
+                    speakText(item.name);
+                }
+
+                // Update Camera section detected translation
+                const mockSign = { name: item.signKey, category: 'Demo', icon: 'fa-solid fa-hand' };
+                updateRecognitionUI(mockSign, 99);
+                confirmSignToSentence(mockSign, 99);
+
+                // Open modal guide if target sign exists in catalog
+                const foundCatalogItem = (window.dictionaryData || []).find(d => 
+                    d.name.toLowerCase().includes(item.name.toLowerCase()) || 
+                    d.handPose.toLowerCase().includes(item.name.toLowerCase())
+                );
+                if (foundCatalogItem) {
+                    openHandGuideModal(foundCatalogItem);
+                }
+            });
+
+            grid.appendChild(card);
         });
     }
 
+    // Initialize Hero Hand & Demo Cards Grid
+    initHeroHand3D();
+    renderDemoCardsGrid();
     renderVisualHandGrid();
 });
+
