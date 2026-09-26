@@ -81,6 +81,14 @@
       "confidence_score": 97,
       "output_mode": "both",
       "translated_at": "2026-09-26T03:00:32.687Z"
+    },
+    {
+      "history_id": 9,
+      "user_id": 1,
+      "sign_name": "HI / HELLO",
+      "confidence_score": 99,
+      "output_mode": "both",
+      "translated_at": "2026-09-26T04:52:01.634Z"
     }
   ],
   "feedback": []

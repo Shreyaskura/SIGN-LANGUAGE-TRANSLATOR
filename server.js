@@ -425,13 +425,39 @@ process.on('unhandledRejection', (reason, promise) => {
     console.error('[Unhandled Rejection]', reason);
 });
 
+const os = require('os');
+
+function getLocalIPs() {
+    const interfaces = os.networkInterfaces();
+    const addresses = [];
+    for (const k in interfaces) {
+        for (const net of interfaces[k]) {
+            if (net.family === 'IPv4' && !net.internal) {
+                addresses.push({ iface: k, address: net.address });
+            }
+        }
+    }
+    return addresses;
+}
+
 let currentPort = parseInt(process.env.PORT, 10) || 8080;
 
 function startListening(port) {
     server.removeAllListeners('listening');
     server.listen(port, () => {
-        console.log(`[Backend & Frontend HTTP Server] running at http://localhost:${port}/`);
-        console.log(`[REST API] Endpoints available at /api/translations, /api/analytics, /api/health`);
+        const ips = getLocalIPs();
+        console.log(`\n======================================================`);
+        console.log(`🚀 SIGN LANGUAGE TRANSLATOR - DBS/DBE SERVER ACTIVE`);
+        console.log(`======================================================`);
+        console.log(`💻 Desktop Access (HTTP):`);
+        console.log(`   http://localhost:${port}/`);
+        if (ips.length > 0) {
+            console.log(`\n📱 Mobile Network Links (Connect phone to same Wi-Fi):`);
+            ips.forEach(i => console.log(`   http://${i.address}:${port}/  (${i.iface})`));
+        }
+        console.log(`\n📊 REST API Endpoints:`);
+        console.log(`   /api/translations, /api/analytics, /api/health`);
+        console.log(`======================================================\n`);
     });
 }
 
@@ -459,7 +485,14 @@ if (fs.existsSync(CERT_FILE) && fs.existsSync(KEY_FILE)) {
             try { socket.end('HTTP/1.1 400 Bad Request\r\n\r\n'); } catch (e) {}
         });
         httpsServer.listen(HTTPS_PORT, () => {
-            console.log(`[Backend & Frontend HTTPS Server] running at https://localhost:${HTTPS_PORT}/ (Secure Camera Mode for iOS/Android)`);
+            const ips = getLocalIPs();
+            console.log(`🔒 [SECURE HTTPS SERVER RUNNING - PORT ${HTTPS_PORT}]`);
+            console.log(`   Desktop: https://localhost:${HTTPS_PORT}/`);
+            if (ips.length > 0) {
+                console.log(`\n📱 >>> RECOMMENDED LINK FOR MOBILE PHONE CAMERA ACCESS <<<`);
+                ips.forEach(i => console.log(`   👉 https://${i.address}:${HTTPS_PORT}/  (${i.iface})`));
+                console.log(`   (Note: On iOS/Android, tap "Advanced" -> "Proceed" to accept SSL cert)\n`);
+            }
         });
     } catch (sslErr) {
         console.warn('[HTTPS Warning] SSL initialization skipped:', sslErr.message);

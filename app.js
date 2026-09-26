@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnToggleSkeleton = document.getElementById('btn-toggle-skeleton');
     const btnToggleTTS = document.getElementById('btn-toggle-tts');
     const btnFlipCamera = document.getElementById('btn-flip-camera');
+    const btnSwitchCamera = document.getElementById('btn-switch-camera');
     const btnQuickHi = document.getElementById('btn-quick-hi');
     const btnToggleDebug = document.getElementById('btn-toggle-debug');
 
@@ -85,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let drawSkeleton = true;
     let ttsEnabled = true;
     let isMirrored = true;
+    let currentFacingMode = 'user'; // 'user' | 'environment'
     let mediaStream = null;
     let cameraInstance = null;
     let handsInstance = null;
@@ -826,14 +828,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!handsInstance) {
             if (handCountLabel) handCountLabel.textContent = "Loading AI Models...";
             handsInstance = new Hands({
-                locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+                locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/${file}`
             });
 
             handsInstance.setOptions({
                 maxNumHands: 2,
                 modelComplexity: 0,
-                minDetectionConfidence: 0.15,
-                minTrackingConfidence: 0.15
+                minDetectionConfidence: 0.20,
+                minTrackingConfidence: 0.20
             });
 
             handsInstance.onResults(onHandResults);
@@ -847,8 +849,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Mobile Secure Context Verification (iOS & Android require HTTPS or localhost)
         const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         const isSecure = window.isSecureContext || isLocalHost;
+        const mobileNotice = document.getElementById('mobile-https-notice');
+        const switchHttpsBtn = document.getElementById('btn-switch-https');
+
         if (!isSecure && (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia)) {
             const httpsUrl = `https://${window.location.hostname}:8443${window.location.pathname}${window.location.search}#camera-section`;
+            if (mobileNotice) {
+                mobileNotice.style.display = 'flex';
+                if (switchHttpsBtn) switchHttpsBtn.href = httpsUrl;
+            }
             if (confirm("📱 Mobile Camera Access Notice:\n\nAndroid Chrome and iOS Safari strictly require a secure (HTTPS) connection for camera permissions.\n\nWould you like to switch to the secure HTTPS link now?\n\n(" + httpsUrl + ")")) {
                 window.location.href = httpsUrl;
                 return;
@@ -858,29 +867,34 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             if (handCountLabel) handCountLabel.textContent = "Starting AI Camera...";
 
-            initMediaPipe();
+            const ready = initMediaPipe();
+            if (!ready) {
+                throw new Error("MediaPipe Hands library not loaded. Check internet connection.");
+            }
 
             // Configure video attributes specifically required by iOS Safari & Android Chrome
             webcamElement.setAttribute('autoplay', '');
             webcamElement.setAttribute('muted', '');
             webcamElement.setAttribute('playsinline', '');
             webcamElement.setAttribute('webkit-playsinline', '');
+            webcamElement.playsInline = true;
             webcamElement.muted = true;
+            webcamElement.autoplay = true;
 
             let stream = null;
             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                // Multi-tiered constraints for maximum compatibility across Android & iPhone
+                // Tiered constraints: try current facingMode first, then fallback
                 const constraintTiers = [
                     {
                         video: {
-                            facingMode: { ideal: "user" },
-                            width: { ideal: 640, max: 1280 },
-                            height: { ideal: 480, max: 720 }
+                            facingMode: { ideal: currentFacingMode },
+                            width: { ideal: 640 },
+                            height: { ideal: 480 }
                         },
                         audio: false
                     },
                     {
-                        video: { facingMode: "user" },
+                        video: { facingMode: currentFacingMode },
                         audio: false
                     },
                     {
@@ -905,7 +919,32 @@ document.addEventListener('DOMContentLoaded', () => {
             if (stream) {
                 mediaStream = stream;
                 webcamElement.srcObject = mediaStream;
-                await webcamElement.play();
+
+                // Wait for video metadata/readiness
+                await new Promise((resolve) => {
+                    if (webcamElement.readyState >= 2 && webcamElement.videoWidth > 0) {
+                        resolve();
+                    } else {
+                        const onLoaded = () => {
+                            webcamElement.removeEventListener('loadedmetadata', onLoaded);
+                            webcamElement.removeEventListener('canplay', onLoaded);
+                            resolve();
+                        };
+                        webcamElement.addEventListener('loadedmetadata', onLoaded);
+                        webcamElement.addEventListener('canplay', onLoaded);
+                        setTimeout(resolve, 1000);
+                    }
+                });
+
+                try {
+                    await webcamElement.play();
+                } catch (playErr) {
+                    console.warn("Video play warning:", playErr);
+                }
+
+                // CRITICAL: Set isCameraActive = true BEFORE starting frame loop
+                isCameraActive = true;
+                isProcessingFrame = false;
                 processVideoFrame();
             } else if (typeof Camera !== 'undefined') {
                 cameraInstance = new Camera(webcamElement, {
@@ -922,12 +961,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     height: 480
                 });
                 await cameraInstance.start();
+                isCameraActive = true;
+                isProcessingFrame = false;
             } else {
                 throw new Error("navigator.mediaDevices is not available in this browser context.");
             }
-
-            isCameraActive = true;
-            isProcessingFrame = false;
 
             if (cameraPlaceholder) cameraPlaceholder.classList.add('hidden');
             if (cameraBtnText) cameraBtnText.textContent = 'Stop Camera';
@@ -938,15 +976,23 @@ document.addEventListener('DOMContentLoaded', () => {
             if (liveIndicator) liveIndicator.style.display = 'inline-flex';
             if (handCountLabel) handCountLabel.textContent = "Scanning for Hands...";
 
+            const islandCamLed = document.getElementById('island-cam-led');
+            if (islandCamLed) islandCamLed.style.display = 'block';
+
             speakText("Camera active. Ready for sign translation.");
 
         } catch (err) {
             console.error("Camera Access Error:", err);
+            isCameraActive = false;
             if (handCountLabel) handCountLabel.textContent = "Camera Error";
             let errMsg = err.message || err.toString();
 
             if (window.location.protocol !== 'https:' && !isLocalHost) {
                 const httpsUrl = `https://${window.location.hostname}:8443${window.location.pathname}#camera-section`;
+                if (mobileNotice) {
+                    mobileNotice.style.display = 'flex';
+                    if (switchHttpsBtn) switchHttpsBtn.href = httpsUrl;
+                }
                 alert(`📱 Camera Access on Mobile Requires HTTPS:\n\nPlease open the secure link:\n${httpsUrl}\n\n(On iOS/Android, tap "Advanced" -> "Proceed" to accept the local SSL cert).`);
             } else {
                 alert("Unable to access camera: " + errMsg);
@@ -962,12 +1008,14 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 await handsInstance.send({ image: webcamElement });
             } catch (err) {
-                console.error("MediaPipe Frame Error:", err);
+                console.warn("MediaPipe Frame Send Warning:", err);
             } finally {
                 isProcessingFrame = false;
             }
         }
-        animFrameId = requestAnimationFrame(processVideoFrame);
+        if (isCameraActive) {
+            animFrameId = requestAnimationFrame(processVideoFrame);
+        }
     }
 
     function stopCamera() {
@@ -998,6 +1046,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (liveIndicator) liveIndicator.style.display = 'none';
         if (fpsCounter) fpsCounter.textContent = '0 FPS';
+        const islandCamLed = document.getElementById('island-cam-led');
+        if (islandCamLed) islandCamLed.style.display = 'none';
         if (handCountLabel) handCountLabel.textContent = 'No Hand Detected';
         if (confidenceLabel) confidenceLabel.textContent = 'Confidence: 0%';
         resetCurrentSignDisplay();
@@ -1462,17 +1512,30 @@ document.addEventListener('DOMContentLoaded', () => {
         return Math.acos(Math.max(-1, Math.min(1, dot))) * (180 / Math.PI);
     }
 
-    function extractHandFeatures(lm, handedness = 'Right', handScore = 96) {
+    function extractHandFeatures(rawLm, handedness = 'Right', handScore = 96) {
+        // 1. Calculate image aspect ratio for metric invariance across desktop & mobile portrait/landscape
+        const videoW = (webcamElement && webcamElement.videoWidth) || (canvasElement && canvasElement.width) || 640;
+        const videoH = (webcamElement && webcamElement.videoHeight) || (canvasElement && canvasElement.height) || 480;
+        const aspect = videoH / Math.max(1, videoW);
+
+        // Convert landmarks to isotropic metric space (Y scaled by aspect ratio)
+        // In metric space, 1 unit along X is physically identical to 1 unit along Y on all screen orientations
+        const lm = rawLm.map(p => ({
+            x: p.x,
+            y: p.y * aspect,
+            z: p.z || 0
+        }));
+
         const wrist = lm[0];
         const indexMcp = lm[5];
         const middleMcp = lm[9];
         const ringMcp = lm[13];
         const pinkyMcp = lm[17];
 
-        // Palm scale: 3D distance from wrist to middle knuckle
+        // Palm scale: 3D distance from wrist to middle knuckle in isotropic space
         const palmScale = Math.max(0.04, dist3D(wrist, middleMcp));
 
-        // Joint Angles in 3D (degrees)
+        // Joint Angles in 3D (degrees) - Now 100% invariant to phone portrait/landscape mode
         const thumbAngle = angleBetween3D(lm[2], lm[3], lm[4]);
         const indexPipAngle = angleBetween3D(lm[5], lm[6], lm[7]);
         const indexDipAngle = angleBetween3D(lm[6], lm[7], lm[8]);
@@ -1483,7 +1546,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const pinkyPipAngle = angleBetween3D(lm[17], lm[18], lm[19]);
         const pinkyDipAngle = angleBetween3D(lm[18], lm[19], lm[20]);
 
-        // Normalized Distance Ratios to Wrist (independent of camera distance)
+        // Normalized Distance Ratios to Wrist (independent of camera distance and aspect ratio)
         const indexWristRatio = dist3D(lm[8], wrist) / Math.max(0.01, dist3D(indexMcp, wrist));
         const middleWristRatio = dist3D(lm[12], wrist) / Math.max(0.01, dist3D(middleMcp, wrist));
         const ringWristRatio = dist3D(lm[16], wrist) / Math.max(0.01, dist3D(ringMcp, wrist));
@@ -1497,25 +1560,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const pinkyTipToMcp = dist3D(lm[20], pinkyMcp) / palmScale;
         const thumbTipToMcp = dist3D(lm[4], indexMcp) / palmScale;
 
-        // Strict 3D Finger Extension States
-        const isIndexExt = (indexPipAngle > 132 && indexWristRatio > 1.32) || (indexWristRatio > 1.55 && indexPipAngle > 118);
-        const isMiddleExt = (middlePipAngle > 132 && middleWristRatio > 1.32) || (middleWristRatio > 1.55 && middlePipAngle > 118);
-        const isRingExt = (ringPipAngle > 132 && ringWristRatio > 1.32) || (ringWristRatio > 1.55 && ringPipAngle > 118);
-        const isPinkyExt = (pinkyPipAngle > 132 && pinkyWristRatio > 1.32) || (pinkyWristRatio > 1.55 && pinkyPipAngle > 118);
-        const isThumbExt = (thumbWristRatio > 1.12 && thumbTipToMcp > 0.65) || thumbTipToMcp > 0.85;
+        // Strict 3D Finger Extension States (optimized for mobile & desktop)
+        const isIndexExt = (indexPipAngle > 128 && indexWristRatio > 1.25) || (indexWristRatio > 1.45 && indexPipAngle > 115);
+        const isMiddleExt = (middlePipAngle > 128 && middleWristRatio > 1.25) || (middleWristRatio > 1.45 && middlePipAngle > 115);
+        const isRingExt = (ringPipAngle > 128 && ringWristRatio > 1.25) || (ringWristRatio > 1.45 && ringPipAngle > 115);
+        const isPinkyExt = (pinkyPipAngle > 128 && pinkyWristRatio > 1.25) || (pinkyWristRatio > 1.45 && pinkyPipAngle > 115);
+        const isThumbExt = (thumbWristRatio > 1.10 && thumbTipToMcp > 0.60) || thumbTipToMcp > 0.80;
 
         // Strict Folded States
-        const isIndexFolded = !isIndexExt && (indexWristRatio < 1.20 || indexPipAngle < 120 || indexTipToMcp < 0.68);
-        const isMiddleFolded = !isMiddleExt && (middleWristRatio < 1.20 || middlePipAngle < 120 || middleTipToMcp < 0.68);
-        const isRingFolded = !isRingExt && (ringWristRatio < 1.20 || ringPipAngle < 120 || ringTipToMcp < 0.68);
-        const isPinkyFolded = !isPinkyExt && (pinkyWristRatio < 1.20 || pinkyPipAngle < 120 || pinkyTipToMcp < 0.68);
-        const isThumbFolded = !isThumbExt && (thumbTipToMcp < 0.58 || dist3D(lm[4], ringMcp) / palmScale < 0.60);
+        const isIndexFolded = !isIndexExt && (indexWristRatio < 1.22 || indexPipAngle < 122 || indexTipToMcp < 0.70);
+        const isMiddleFolded = !isMiddleExt && (middleWristRatio < 1.22 || middlePipAngle < 122 || middleTipToMcp < 0.70);
+        const isRingFolded = !isRingExt && (ringWristRatio < 1.22 || ringPipAngle < 122 || ringTipToMcp < 0.70);
+        const isPinkyFolded = !isPinkyExt && (pinkyWristRatio < 1.22 || pinkyPipAngle < 122 || pinkyTipToMcp < 0.70);
+        const isThumbFolded = !isThumbExt && (thumbTipToMcp < 0.60 || dist3D(lm[4], ringMcp) / palmScale < 0.62);
 
         // Alphabet X Hooked Index Finger: PIP curled (60-125 deg), MCP extended, tip not tucked in palm
         const isIndexHooked = !isIndexExt && indexPipAngle < 125 && indexPipAngle > 55 && lm[8].y > lm[6].y && indexTipToMcp > 0.45;
 
-        // Thumb Upright (Thumbs up / Help)
-        const isThumbUp = lm[4].y < lm[2].y && lm[4].y < lm[5].y && ((wrist.y - lm[4].y) / palmScale > 0.45);
+        // Thumb Upright (Thumbs up / Help) - metric normalized height difference
+        const isThumbUp = (lm[4].y < lm[2].y) && (lm[4].y < lm[5].y) && ((wrist.y - lm[4].y) / palmScale > 0.38);
 
         // Extended Finger Count
         const extendedCount = [isIndexExt, isMiddleExt, isRingExt, isPinkyExt].filter(Boolean).length;
@@ -1530,13 +1593,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const middleRingDist = dist3D(lm[12], lm[16]) / palmScale;
         const ringPinkyDist = dist3D(lm[16], lm[20]) / palmScale;
 
-        const allFingersTogether = indexMiddleDist < 0.23 && middleRingDist < 0.23 && ringPinkyDist < 0.23;
-        const allFingersSpread = indexMiddleDist > 0.26 && middleRingDist > 0.26;
+        const allFingersTogether = indexMiddleDist < 0.24 && middleRingDist < 0.24 && ringPinkyDist < 0.24;
+        const allFingersSpread = indexMiddleDist > 0.24 && middleRingDist > 0.24;
 
-        // Frame boundary check
+        // Frame boundary check (using raw coordinates [0..1])
         let isNearEdge = false;
         for (let i = 0; i < 21; i++) {
-            if (lm[i].x < 0.04 || lm[i].x > 0.96 || lm[i].y < 0.04 || lm[i].y > 0.96) {
+            if (rawLm[i].x < 0.04 || rawLm[i].x > 0.96 || rawLm[i].y < 0.04 || rawLm[i].y > 0.96) {
                 isNearEdge = true;
                 break;
             }
@@ -2578,6 +2641,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    if (btnSwitchCamera) {
+        btnSwitchCamera.addEventListener('click', async () => {
+            currentFacingMode = (currentFacingMode === 'user') ? 'environment' : 'user';
+            const span = btnSwitchCamera.querySelector('span');
+            if (span) span.textContent = (currentFacingMode === 'user') ? 'Front Cam' : 'Rear Cam';
+            isMirrored = (currentFacingMode === 'user');
+            if (webcamElement) {
+                webcamElement.style.transform = isMirrored ? 'scaleX(-1)' : 'scaleX(1)';
+            }
+            if (btnFlipCamera) {
+                btnFlipCamera.classList.toggle('active', isMirrored);
+            }
+            if (isCameraActive) {
+                stopCamera();
+                setTimeout(() => {
+                    startCamera();
+                }, 300);
+            }
+        });
+    }
+
     if (btnToggleDebug) {
         btnToggleDebug.addEventListener('click', () => {
             isDebugMode = !isDebugMode;
@@ -3092,7 +3176,46 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Initialize Hero Hand & Demo Cards Grid
+    // =========================================================================
+    // 7. Interactive Desktop Phone Shape Simulator Suite & Toast Helper
+    // =========================================================================
+    function showToast(title, msg) {
+        let toast = document.getElementById('app-system-toast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'app-system-toast';
+            toast.style.cssText = `
+                position: fixed;
+                top: 24px;
+                right: 24px;
+                z-index: 999999;
+                background: rgba(15, 23, 42, 0.95);
+                border: 1px solid rgba(0, 240, 255, 0.4);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.7), 0 0 20px rgba(0, 240, 255, 0.25);
+                border-radius: 12px;
+                padding: 12px 18px;
+                color: #fff;
+                display: flex;
+                flex-direction: column;
+                gap: 3px;
+                pointer-events: none;
+                transition: opacity 0.3s ease, transform 0.3s ease;
+                transform: translateY(-10px);
+                opacity: 0;
+            `;
+            document.body.appendChild(toast);
+        }
+        toast.innerHTML = `<strong style="font-size:13px; color:#00f0ff;">${title}</strong><span style="font-size:11px; color:#94a3b8;">${msg}</span>`;
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateY(0)';
+        clearTimeout(toast._timeout);
+        toast._timeout = setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(-10px)';
+        }, 2800);
+    }
+
+    // Initialize Hero Hand & Demo Cards Grid & Live Recognition
     initHeroHand3D();
     renderDemoCardsGrid();
     renderVisualHandGrid();

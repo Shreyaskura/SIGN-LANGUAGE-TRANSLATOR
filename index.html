@@ -28,7 +28,7 @@
     <!-- MediaPipe Hands & Camera Utils CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/hands.js" crossorigin="anonymous"></script>
 </head>
 
 <body class="theme-signflow">
@@ -285,6 +285,14 @@
                                 <button id="btn-start-placeholder" class="btn btn-primary">
                                     <i class="fa-solid fa-power-off"></i> Start Camera
                                 </button>
+                                <!-- Mobile HTTPS Notice if opened via insecure HTTP -->
+                                <div id="mobile-https-notice" class="mobile-https-notice" style="display: none;">
+                                    <div class="notice-pill"><i class="fa-solid fa-shield-halved"></i> Mobile HTTPS Mode Required</div>
+                                    <p>Mobile browsers require HTTPS to grant camera permission.</p>
+                                    <a id="btn-switch-https" class="btn btn-sm btn-accent" href="#">
+                                        <i class="fa-solid fa-lock"></i> Switch to Secure HTTPS
+                                    </a>
+                                </div>
                             </div>
 
                             <!-- Overlay Hand Tracking Info -->
@@ -311,6 +319,9 @@
                         <div class="camera-controls">
                             <button id="btn-toggle-camera" class="btn btn-primary">
                                 <i class="fa-solid fa-video"></i> <span id="camera-btn-text">Start Camera</span>
+                            </button>
+                            <button id="btn-switch-camera" class="btn btn-outline" title="Switch Front / Rear Camera (Mobile)">
+                                <i class="fa-solid fa-arrows-rotate"></i> <span>Front Cam</span>
                             </button>
                             <button id="btn-flip-camera" class="btn btn-outline active" title="Flip Camera View">
                                 <i class="fa-solid fa-camera-rotate"></i> <span>Mirror</span>
