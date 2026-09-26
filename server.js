@@ -391,7 +391,41 @@ const server = http.createServer(async (req, res) => {
     });
 });
 
-server.listen(PORT, () => {
-    console.log(`[Backend & Frontend Server] running at http://localhost:${PORT}/`);
-    console.log(`[REST API] Endpoints available at /api/translations, /api/analytics, /api/health`);
+server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+        console.warn(`[Port Conflict] Port ${currentPort} is already in use. Retrying on port ${currentPort + 1}...`);
+        currentPort++;
+        setTimeout(() => startListening(currentPort), 250);
+    } else {
+        console.error('[Server Error]', err);
+    }
 });
+
+server.on('clientError', (err, socket) => {
+    if (err.code === 'ECONNRESET' || !socket.writable) {
+        return;
+    }
+    socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+});
+
+process.on('uncaughtException', (err) => {
+    console.error('[Uncaught Exception]', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('[Unhandled Rejection]', reason);
+});
+
+let currentPort = parseInt(process.env.PORT, 10) || 8080;
+
+function startListening(port) {
+    server.removeAllListeners('listening');
+    server.listen(port, () => {
+        console.log(`[Backend & Frontend Server] running at http://localhost:${port}/`);
+        console.log(`[REST API] Endpoints available at /api/translations, /api/analytics, /api/health`);
+    });
+}
+
+startListening(currentPort);
+
+
