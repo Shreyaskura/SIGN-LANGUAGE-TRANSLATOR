@@ -4,13 +4,18 @@
 // ============================================================================
 
 const http = require('http');
+const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
 const PORT = 8080;
+const HTTPS_PORT = 8443;
 const PUBLIC_DIR = __dirname;
 const DATA_DIR = path.join(__dirname, 'data');
 const DB_FILE = path.join(DATA_DIR, 'translations_db.json');
+const SSL_DIR = path.join(__dirname, 'ssl');
+const CERT_FILE = path.join(SSL_DIR, 'cert.pem');
+const KEY_FILE = path.join(SSL_DIR, 'key.pem');
 
 // Ensure data persistence directory exists
 if (!fs.existsSync(DATA_DIR)) {
@@ -261,8 +266,10 @@ function parseJSONBody(req) {
     });
 }
 
-const server = http.createServer(async (req, res) => {
-    const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+const requestHandler = async (req, res) => {
+    const isHttps = req.connection.encrypted || req.headers['x-forwarded-proto'] === 'https';
+    const protocol = isHttps ? 'https' : 'http';
+    const parsedUrl = new URL(req.url, `${protocol}://${req.headers.host || 'localhost'}`);
     const pathname = parsedUrl.pathname;
     const method = req.method.toUpperCase();
 
@@ -389,7 +396,9 @@ const server = http.createServer(async (req, res) => {
             res.end(content, 'utf-8');
         }
     });
-});
+};
+
+const server = http.createServer(requestHandler);
 
 server.on('error', (err) => {
     if (err.code === 'EADDRINUSE') {
@@ -421,11 +430,32 @@ let currentPort = parseInt(process.env.PORT, 10) || 8080;
 function startListening(port) {
     server.removeAllListeners('listening');
     server.listen(port, () => {
-        console.log(`[Backend & Frontend Server] running at http://localhost:${port}/`);
+        console.log(`[Backend & Frontend HTTP Server] running at http://localhost:${port}/`);
         console.log(`[REST API] Endpoints available at /api/translations, /api/analytics, /api/health`);
     });
 }
 
 startListening(currentPort);
+
+// Start HTTPS Server for Mobile Camera access
+let httpsServer = null;
+if (fs.existsSync(CERT_FILE) && fs.existsSync(KEY_FILE)) {
+    try {
+        const sslOptions = {
+            cert: fs.readFileSync(CERT_FILE),
+            key: fs.readFileSync(KEY_FILE)
+        };
+        httpsServer = https.createServer(sslOptions, requestHandler);
+        httpsServer.on('error', (err) => {
+            console.error('[HTTPS Server Error]', err.message);
+        });
+        httpsServer.listen(HTTPS_PORT, () => {
+            console.log(`[Backend & Frontend HTTPS Server] running at https://localhost:${HTTPS_PORT}/ (Secure Camera Mode for iOS/Android)`);
+        });
+    } catch (sslErr) {
+        console.warn('[HTTPS Warning] SSL initialization skipped:', sslErr.message);
+    }
+}
+
 
 

@@ -844,12 +844,70 @@ document.addEventListener('DOMContentLoaded', () => {
     async function startCamera() {
         if (isCameraActive || !webcamElement) return;
 
+        // 1. Mobile Secure Context Verification (iOS & Android require HTTPS or localhost)
+        const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const isSecure = window.isSecureContext || isLocalHost;
+        if (!isSecure && (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia)) {
+            const httpsUrl = `https://${window.location.hostname}:8443${window.location.pathname}${window.location.search}#camera-section`;
+            if (confirm("📱 Mobile Camera Access Notice:\n\nAndroid Chrome and iOS Safari strictly require a secure (HTTPS) connection for camera permissions.\n\nWould you like to switch to the secure HTTPS link now?\n\n(" + httpsUrl + ")")) {
+                window.location.href = httpsUrl;
+                return;
+            }
+        }
+
         try {
             if (handCountLabel) handCountLabel.textContent = "Starting AI Camera...";
 
             initMediaPipe();
 
-            if (typeof Camera !== 'undefined') {
+            // Configure video attributes specifically required by iOS Safari & Android Chrome
+            webcamElement.setAttribute('autoplay', '');
+            webcamElement.setAttribute('muted', '');
+            webcamElement.setAttribute('playsinline', '');
+            webcamElement.setAttribute('webkit-playsinline', '');
+            webcamElement.muted = true;
+
+            let stream = null;
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                // Multi-tiered constraints for maximum compatibility across Android & iPhone
+                const constraintTiers = [
+                    {
+                        video: {
+                            facingMode: { ideal: "user" },
+                            width: { ideal: 640, max: 1280 },
+                            height: { ideal: 480, max: 720 }
+                        },
+                        audio: false
+                    },
+                    {
+                        video: { facingMode: "user" },
+                        audio: false
+                    },
+                    {
+                        video: true,
+                        audio: false
+                    }
+                ];
+
+                let lastErr = null;
+                for (const constraints of constraintTiers) {
+                    try {
+                        stream = await navigator.mediaDevices.getUserMedia(constraints);
+                        if (stream) break;
+                    } catch (e) {
+                        lastErr = e;
+                    }
+                }
+
+                if (!stream && lastErr) throw lastErr;
+            }
+
+            if (stream) {
+                mediaStream = stream;
+                webcamElement.srcObject = mediaStream;
+                await webcamElement.play();
+                processVideoFrame();
+            } else if (typeof Camera !== 'undefined') {
                 cameraInstance = new Camera(webcamElement, {
                     onFrame: async () => {
                         if (handsInstance && isCameraActive) {
@@ -865,13 +923,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 await cameraInstance.start();
             } else {
-                mediaStream = await navigator.mediaDevices.getUserMedia({
-                    video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: "user" },
-                    audio: false
-                });
-                webcamElement.srcObject = mediaStream;
-                await webcamElement.play();
-                processVideoFrame();
+                throw new Error("navigator.mediaDevices is not available in this browser context.");
             }
 
             isCameraActive = true;
@@ -891,7 +943,14 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             console.error("Camera Access Error:", err);
             if (handCountLabel) handCountLabel.textContent = "Camera Error";
-            alert("Unable to access camera: " + (err.message || err));
+            let errMsg = err.message || err.toString();
+
+            if (window.location.protocol !== 'https:' && !isLocalHost) {
+                const httpsUrl = `https://${window.location.hostname}:8443${window.location.pathname}#camera-section`;
+                alert(`📱 Camera Access on Mobile Requires HTTPS:\n\nPlease open the secure link:\n${httpsUrl}\n\n(On iOS/Android, tap "Advanced" -> "Proceed" to accept the local SSL cert).`);
+            } else {
+                alert("Unable to access camera: " + errMsg);
+            }
         }
     }
 
