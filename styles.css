@@ -1189,6 +1189,7 @@ body {
     height: 100%;
     object-fit: cover;
     transform: scaleX(-1); /* Default Mirrored */
+    filter: brightness(1.15) contrast(1.1);
 }
 
 #output_canvas {
@@ -1271,6 +1272,71 @@ body {
 
 .info-chip i {
     color: var(--coral);
+}
+
+.info-chip.quality-good i {
+    color: #10b981;
+}
+
+.info-chip.quality-warn i {
+    color: #f59e0b;
+}
+
+/* AI Debug HUD */
+.ai-debug-hud {
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    background: rgba(11, 17, 30, 0.92);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(0, 240, 255, 0.28);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-family: var(--font-code);
+    font-size: 11px;
+    color: #e2e8f0;
+    z-index: 10;
+    pointer-events: none;
+    line-height: 1.5;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
+    max-width: 320px;
+}
+
+.ai-debug-hud .debug-header {
+    color: #00f0ff;
+    font-weight: 700;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 4px;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.ai-debug-hud .debug-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.ai-debug-hud .val-ext {
+    color: #34d399;
+    font-weight: 600;
+}
+
+.ai-debug-hud .val-fold {
+    color: #94a3b8;
+}
+
+.ai-debug-hud .val-sign {
+    color: #ff6b55;
+    font-weight: 700;
+}
+
+.ai-debug-hud .val-stab {
+    color: #38bdf8;
 }
 
 /* Camera Controls Toolbar */
@@ -1498,10 +1564,69 @@ body {
 .history-card {
     display: flex;
     flex-direction: column;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.history-card.highlight-pulse {
+    border-color: var(--coral) !important;
+    box-shadow: 0 0 25px rgba(255, 107, 85, 0.4) !important;
+}
+
+.history-header-clickable {
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s ease;
+}
+
+.history-header-clickable:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.history-toggle-icon {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-left: 8px;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.history-card.is-collapsed .history-toggle-icon {
+    transform: rotate(-90deg);
+}
+
+.history-card.is-collapsed .history-table-wrapper {
+    display: none;
+}
+
+.history-header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn-delete-all {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #f87171;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-delete-all:hover {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: rgba(239, 68, 68, 0.5);
+    color: #ffffff;
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
 }
 
 .history-table-wrapper {
-    max-height: 220px;
+    max-height: 240px;
     overflow-y: auto;
 }
 
@@ -1513,8 +1638,8 @@ body {
 }
 
 .history-table th {
-    padding: 10px 18px;
-    background: rgba(11, 17, 30, 0.6);
+    padding: 10px 16px;
+    background: rgba(11, 17, 30, 0.7);
     color: var(--text-dim);
     font-weight: 600;
     font-size: 11px;
@@ -1524,14 +1649,53 @@ body {
 }
 
 .history-table td {
-    padding: 10px 18px;
+    padding: 10px 16px;
     border-bottom: 1px solid var(--border-glass);
     color: var(--text-secondary);
+    vertical-align: middle;
 }
 
-.history-table tr:hover td {
-    background: rgba(255, 255, 255, 0.03);
+.history-row {
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.history-row:hover td {
+    background: rgba(0, 240, 255, 0.04);
     color: var(--text-pure);
+}
+
+.history-action-btns {
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.btn-row-action {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-glass);
+    color: var(--text-secondary);
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-row-action:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--text-pure);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-row-action.btn-del-row:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #f87171;
 }
 
 .no-data-row td {

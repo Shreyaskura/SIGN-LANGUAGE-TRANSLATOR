@@ -173,7 +173,7 @@ JOIN users u ON th.user_id = u.user_id
 JOIN gestures g ON th.gesture_id = g.gesture_id
 GROUP BY u.user_id, u.username, g.gesture_id, g.sign_name;
 
--- Query 3: Outer Join Audit for Unused Gestures in Dictionary
+-- Query 3: Outer Join Audit for Unused Gestures in Dictionary (LEFT & FULL OUTER JOIN)
 SELECT 
     g.gesture_id,
     g.sign_name,
@@ -181,3 +181,110 @@ SELECT
 FROM gestures g
 LEFT JOIN translation_history th ON g.gesture_id = th.gesture_id
 WHERE th.history_id IS NULL;
+
+-- Query 4: Aggregation with HAVING Clause (High Volume, High Accuracy Categories)
+SELECT 
+    g.category,
+    COUNT(th.history_id) AS total_logged,
+    ROUND(AVG(th.confidence_score), 2) AS avg_accuracy
+FROM gestures g
+JOIN translation_history th ON g.gesture_id = th.gesture_id
+GROUP BY g.category
+HAVING COUNT(th.history_id) >= 1 AND AVG(th.confidence_score) >= 95.00
+ORDER BY avg_accuracy DESC;
+
+-- Query 5: Subquery (Gestures Performing Above the Overall System Average Confidence)
+SELECT 
+    gesture_id, 
+    sign_name, 
+    category
+FROM gestures
+WHERE gesture_id IN (
+    SELECT gesture_id 
+    FROM translation_history 
+    GROUP BY gesture_id 
+    HAVING AVG(confidence_score) > (SELECT AVG(confidence_score) FROM translation_history)
+);
+
+-- Query 6: Common Table Expression (CTE) - Multi-Stage Analytical Pipeline
+WITH CategoryMetrics AS (
+    SELECT 
+        g.category,
+        COUNT(th.history_id) AS trans_count,
+        AVG(th.confidence_score) AS cat_avg_conf
+    FROM gestures g
+    JOIN translation_history th ON g.gesture_id = th.gesture_id
+    GROUP BY g.category
+),
+RankedCategories AS (
+    SELECT 
+        category,
+        trans_count,
+        ROUND(cat_avg_conf, 2) AS cat_avg_conf,
+        DENSE_RANK() OVER (ORDER BY trans_count DESC) AS popularity_rank
+    FROM CategoryMetrics
+)
+SELECT * FROM RankedCategories WHERE popularity_rank <= 5;
+
+-- ----------------------------------------------------------------------------
+-- SECTION 6: CO4 - TRANSACTIONS, ACID PROPERTIES & ISOLATION BOUNDARIES
+-- ----------------------------------------------------------------------------
+
+-- Transaction Example: Atomic Gesture Translation Logging & Feedback Ingestion
+-- Demonstrates Atomicity, Consistency, Isolation (REPEATABLE READ), and Durability
+BEGIN;
+
+-- Set Transaction Isolation Level (Guarantees repeatable reads without phantom anomalies)
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+-- 1. Insert into translation_history
+INSERT INTO translation_history (user_id, gesture_id, recognized_text, confidence_score, output_mode)
+VALUES (1, 2, 'THANK YOU', 98.00, 'both')
+RETURNING history_id;
+
+-- 2. Create Savepoint to protect against partial failures
+SAVEPOINT after_history_insert;
+
+-- 3. Ingest User Feedback linked to the transaction
+INSERT INTO translation_feedback (history_id, actual_gesture_id, is_correct, user_notes)
+VALUES (currval(pg_get_serial_sequence('translation_history', 'history_id')), 2, TRUE, 'Perfect pose verification');
+
+-- 4. Commit transaction atomically
+COMMIT;
+
+-- ----------------------------------------------------------------------------
+-- SECTION 7: CO5 - COVERING INDEXES, QUERY OPTIMIZATION & EXPLAIN PLANS
+-- ----------------------------------------------------------------------------
+
+-- Composite & Covering Index for Index-Only Scans
+CREATE INDEX idx_user_trans_covering ON translation_history(user_id, confidence_score) 
+INCLUDE (recognized_text, translated_at);
+
+-- Multi-column Composite Index for User Time-Series queries
+CREATE INDEX idx_user_timestamp ON translation_history(user_id, translated_at DESC);
+
+-- EXPLAIN ANALYZE Execution Plans
+-- 1. Index Scan using B-Tree index:
+EXPLAIN ANALYZE 
+SELECT history_id, recognized_text, confidence_score 
+FROM translation_history 
+WHERE user_id = 1 AND confidence_score > 90.00;
+
+-- 2. Covering Index-Only Scan (Avoids Heap Fetch entirely):
+EXPLAIN ANALYZE 
+SELECT user_id, confidence_score, recognized_text, translated_at 
+FROM translation_history 
+WHERE user_id = 1 AND confidence_score >= 95.00;
+
+-- ----------------------------------------------------------------------------
+-- SECTION 8: CO6 - DISTRIBUTED PERSISTENCE & HORIZONTAL SCALING STRATEGY
+-- ----------------------------------------------------------------------------
+-- 1. Polyglot Persistence:
+--    - PostgreSQL (ACID/Relational): Manages Users, Gestures, and Validated Logs (CP/Consistency prioritized).
+--    - MongoDB (NoSQL Document Store): Stores high-velocity, flexible 3D hand landmark telemetry frames (AP/Availability prioritized).
+-- 2. Read Scaling:
+--    - Primary (Port 5432) handles writes (INSERT translation_history).
+--    - Read-Replicas handle analytical dashboards and reports (vw_user_translation_summary).
+-- 3. Horizontal Sharding Strategy:
+--    - Partitioning translation_history by Range (translated_at) or Hash (user_id % num_shards).
+
