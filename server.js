@@ -449,6 +449,15 @@ if (fs.existsSync(CERT_FILE) && fs.existsSync(KEY_FILE)) {
         httpsServer.on('error', (err) => {
             console.error('[HTTPS Server Error]', err.message);
         });
+        httpsServer.on('tlsClientError', (err, socket) => {
+            if (socket && socket.writable) {
+                try { socket.destroy(); } catch (e) {}
+            }
+        });
+        httpsServer.on('clientError', (err, socket) => {
+            if (err.code === 'ECONNRESET' || !socket.writable) return;
+            try { socket.end('HTTP/1.1 400 Bad Request\r\n\r\n'); } catch (e) {}
+        });
         httpsServer.listen(HTTPS_PORT, () => {
             console.log(`[Backend & Frontend HTTPS Server] running at https://localhost:${HTTPS_PORT}/ (Secure Camera Mode for iOS/Android)`);
         });
