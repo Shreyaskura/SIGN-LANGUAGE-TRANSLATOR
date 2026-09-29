@@ -656,13 +656,13 @@
                 pose.thumb  = { cmcX: -0.3, cmcY: 0.0, cmcZ: 0.8, mcpX: -0.2, mcpZ: 0.0, ipX: -0.1 };  // Straight up
             
             } else if (name.includes('HELP')) {
-                /* HELP - Open palm with thumb up at angle */
+                /* HELP - Dominant hand forms upright Thumbs Up fist placed over support palm */
                 pose.wrist  = { x: 0.0, y: 0.0, z: 0.0 };
-                pose.index  = { mcpX: 0.0, pipX: 0.0, dipX: 0.0, mcpY: 0, mcpZ: 0.1 };   // Slightly spread
-                pose.middle = { mcpX: 0.0, pipX: 0.0, dipX: 0.0, mcpY: 0, mcpZ: 0.0 };
-                pose.ring   = { mcpX: 0.0, pipX: 0.0, dipX: 0.0, mcpY: 0, mcpZ: 0.0 };
-                pose.pinky  = { mcpX: 0.0, pipX: 0.0, dipX: 0.0, mcpY: 0, mcpZ: -0.1 };
-                pose.thumb  = { cmcX: 0.0, cmcY: 0.1, cmcZ: 0.6, mcpX: 0.0, mcpZ: 0.0, ipX: 0.0 };  // Up at angle
+                pose.index  = { mcpX: 1.45, pipX: 1.55, dipX: 1.45, mcpY: 0, mcpZ: 0.0 };   // Curled into fist
+                pose.middle = { mcpX: 1.45, pipX: 1.55, dipX: 1.45, mcpY: 0, mcpZ: 0.0 };
+                pose.ring   = { mcpX: 1.45, pipX: 1.55, dipX: 1.45, mcpY: 0, mcpZ: 0.0 };
+                pose.pinky  = { mcpX: 1.45, pipX: 1.55, dipX: 1.45, mcpY: 0, mcpZ: 0.0 };
+                pose.thumb  = { cmcX: -0.25, cmcY: 0.0, cmcZ: 0.75, mcpX: -0.15, mcpZ: 0.0, ipX: -0.1 };  // Upright thumb
 
             } else if (name.includes('THANK') || name === 'ALPHABET B') {
                 /* THANK YOU - Flat palm, all fingers straight together */

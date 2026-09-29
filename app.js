@@ -108,6 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Advanced Recognition AI Pipeline State
     let isDebugMode = false;
     let smoothedLandmarks = null;
+    let smoothedLandmarksMap = [null, null];
+    let lastDetectedNumHands = 0;
     let predictionWindow = [];
     const PREDICTION_WINDOW_MAX = 8;
     const STABILITY_THRESHOLD = 5;
@@ -853,7 +855,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const switchHttpsBtn = document.getElementById('btn-switch-https');
 
         if (!isSecure && (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia)) {
-            const httpsUrl = `https://${window.location.hostname}:8443${window.location.pathname}${window.location.search}#camera-section`;
+            const isLocalPrivateIP = /^(\d{1,3}\.){3}\d{1,3}$/.test(window.location.hostname);
+            const httpsUrl = isLocalPrivateIP
+                ? `https://${window.location.hostname}:8443${window.location.pathname}${window.location.search}#camera-section`
+                : `https://${window.location.host}${window.location.pathname}${window.location.search}#camera-section`;
             if (mobileNotice) {
                 mobileNotice.style.display = 'flex';
                 if (switchHttpsBtn) switchHttpsBtn.href = httpsUrl;
@@ -988,7 +993,10 @@ document.addEventListener('DOMContentLoaded', () => {
             let errMsg = err.message || err.toString();
 
             if (window.location.protocol !== 'https:' && !isLocalHost) {
-                const httpsUrl = `https://${window.location.hostname}:8443${window.location.pathname}#camera-section`;
+                const isLocalPrivateIP = /^(\d{1,3}\.){3}\d{1,3}$/.test(window.location.hostname);
+                const httpsUrl = isLocalPrivateIP
+                    ? `https://${window.location.hostname}:8443${window.location.pathname}#camera-section`
+                    : `https://${window.location.host}${window.location.pathname}#camera-section`;
                 if (mobileNotice) {
                     mobileNotice.style.display = 'flex';
                     if (switchHttpsBtn) switchHttpsBtn.href = httpsUrl;
@@ -1079,32 +1087,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
             const numHands = results.multiHandLandmarks.length;
+            lastDetectedNumHands = numHands;
             if (handCountLabel) handCountLabel.textContent = `${numHands} Hand${numHands > 1 ? 's' : ''} Detected`;
 
-            const rawPrimaryLandmarks = results.multiHandLandmarks[0];
-            const handednessObj = results.multiHandedness && results.multiHandedness[0];
-            const handLabel = (handednessObj && handednessObj.label) ? handednessObj.label : 'Right';
-            const handScore = handednessObj ? Math.round(handednessObj.score * 100) : 96;
+            // Extract features and smoothed landmarks for all detected hands
+            const handsList = [];
+            for (let i = 0; i < numHands; i++) {
+                const rawLm = results.multiHandLandmarks[i];
+                const smoothedLm = smoothLandmarks(rawLm, i);
+                const handednessObj = results.multiHandedness && results.multiHandedness[i];
+                const handLabel = (handednessObj && handednessObj.label) ? handednessObj.label : (i === 0 ? 'Right' : 'Left');
+                const handScore = handednessObj ? Math.round(handednessObj.score * 100) : 96;
+                const features = extractHandFeatures(smoothedLm, handLabel, handScore);
+                handsList.push({
+                    rawLm,
+                    smoothedLm,
+                    label: handLabel,
+                    score: handScore,
+                    features
+                });
+            }
+
+            // Determine primary hand for telemetry HUD (if HELP with 2 hands, prioritize thumbs-up hand)
+            let primaryIndex = 0;
+            if (numHands >= 2 && handsList.length >= 2) {
+                const isThumb0 = handsList[0].features.isThumbUp || (handsList[0].smoothedLm[4].y < handsList[0].smoothedLm[2].y && handsList[0].features.extendedCount <= 1);
+                const isThumb1 = handsList[1].features.isThumbUp || (handsList[1].smoothedLm[4].y < handsList[1].smoothedLm[2].y && handsList[1].features.extendedCount <= 1);
+                if (!isThumb0 && isThumb1) {
+                    primaryIndex = 1;
+                }
+            }
+
+            const primaryHand = handsList[primaryIndex];
+            const primaryLandmarks = primaryHand.smoothedLm;
+            const features = primaryHand.features;
+            const handScore = primaryHand.score;
             if (confidenceLabel) confidenceLabel.textContent = `Confidence: ${handScore}%`;
-
-            // 1. Light Landmark Smoothing to Eliminate Jitter
-            const primaryLandmarks = smoothLandmarks(rawPrimaryLandmarks);
-
-            // 2. Extract Invariant Kinematic Features & Diagnostics
-            const features = extractHandFeatures(primaryLandmarks, handLabel, handScore);
             updateQualityDiagnostics(features, handScore);
 
-            // 3. Multi-Feature Recognition with Strict Negative Matching
-            const framePrediction = classifyHandGesture(features, primaryLandmarks, numHands);
+            // 3. Multi-Feature Recognition with Dual-Hand Evaluation for HELP
+            const framePrediction = classifyHandGesture(features, primaryLandmarks, numHands, handsList);
 
             // 4. Temporal Stability Buffer Filtering (Window of 8 frames)
             const stableResult = processTemporalStability(framePrediction, features);
 
-            // 5. Render Visual AI Overlay
+            // 5. Render Visual AI Overlay for ALL Detected Hands
             if (drawSkeleton) {
                 try {
-                    for (const landmarks of results.multiHandLandmarks) {
-                        drawFuturisticAIHandOverlay(canvasCtx, landmarks, handScore, stableResult, targetW, targetH);
+                    for (let i = 0; i < handsList.length; i++) {
+                        drawFuturisticAIHandOverlay(canvasCtx, handsList[i].smoothedLm, handsList[i].score, stableResult, targetW, targetH);
                     }
                 } catch (drawErr) {
                     console.warn("Futuristic overlay render error:", drawErr);
@@ -1119,6 +1150,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } else {
             smoothedLandmarks = null;
+            smoothedLandmarksMap = [null, null];
+            lastDetectedNumHands = 0;
             predictionWindow = [];
             if (handCountLabel) handCountLabel.textContent = 'No Hand Detected';
             if (confidenceLabel) confidenceLabel.textContent = 'Confidence: 0%';
@@ -1480,19 +1513,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // 4. Advanced 3D Kinematic Landmark AI Recognition Engine (Invariant & Strict)
     // =========================================================================
 
-    function smoothLandmarks(rawLm) {
+    function smoothLandmarks(rawLm, handIdx = 0) {
         if (!rawLm || rawLm.length < 21) return rawLm;
-        if (!smoothedLandmarks || smoothedLandmarks.length !== 21) {
-            smoothedLandmarks = rawLm.map(p => ({ x: p.x, y: p.y, z: p.z || 0 }));
-            return smoothedLandmarks;
+        if (!smoothedLandmarksMap[handIdx] || smoothedLandmarksMap[handIdx].length !== 21) {
+            smoothedLandmarksMap[handIdx] = rawLm.map(p => ({ x: p.x, y: p.y, z: p.z || 0 }));
+            if (handIdx === 0) smoothedLandmarks = smoothedLandmarksMap[0];
+            return smoothedLandmarksMap[handIdx];
         }
         const alpha = 0.72;
+        const target = smoothedLandmarksMap[handIdx];
         for (let i = 0; i < 21; i++) {
-            smoothedLandmarks[i].x = alpha * rawLm[i].x + (1 - alpha) * smoothedLandmarks[i].x;
-            smoothedLandmarks[i].y = alpha * rawLm[i].y + (1 - alpha) * smoothedLandmarks[i].y;
-            smoothedLandmarks[i].z = alpha * (rawLm[i].z || 0) + (1 - alpha) * smoothedLandmarks[i].z;
+            target[i].x = alpha * rawLm[i].x + (1 - alpha) * target[i].x;
+            target[i].y = alpha * rawLm[i].y + (1 - alpha) * target[i].y;
+            target[i].z = alpha * (rawLm[i].z || 0) + (1 - alpha) * target[i].z;
         }
-        return smoothedLandmarks;
+        if (handIdx === 0) smoothedLandmarks = target;
+        return target;
     }
 
     function dist3D(p1, p2) {
@@ -1663,12 +1699,66 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function classifyHandGesture(f, lm, numHands = 1) {
+    function classifyHandGesture(f, lm, numHands = 1, handsList = []) {
         const candidates = [];
 
         function addCandidate(name, category, icon, score) {
             if (score > 0.55) {
                 candidates.push({ name, category, icon, score });
+            }
+        }
+
+        // =====================================================================
+        // TWO-HAND GESTURE EVALUATION ENGINE (ASL HELP & DUAL HANDS)
+        // =====================================================================
+        const checkIsThumbsUp = (feat, landmarks) => {
+            if (!feat || !landmarks) return false;
+            const thumbUpright = feat.isThumbUp || 
+                (landmarks[4].y < landmarks[2].y && landmarks[4].y < landmarks[0].y && ((landmarks[0].y - landmarks[4].y) / Math.max(0.04, feat.palmScale) > 0.28));
+            const fingersCurled = feat.extendedCount <= 1 && 
+                (feat.isIndexFolded || feat.indexPipAngle < 138) && 
+                (feat.isMiddleFolded || feat.middlePipAngle < 138) &&
+                (feat.isRingFolded || feat.ringPipAngle < 138) &&
+                (feat.isPinkyFolded || feat.pinkyPipAngle < 138);
+            return thumbUpright && fingersCurled;
+        };
+
+        const checkIsFlatSupport = (feat, landmarks) => {
+            if (!feat || !landmarks) return false;
+            if (feat.isThumbUp && feat.extendedCount <= 1) return false;
+            return feat.allFiveExtended || feat.extendedCount >= 3 || (feat.extendedCount >= 2 && feat.allFingersTogether);
+        };
+
+        if (numHands >= 2 && handsList && handsList.length >= 2) {
+            const h0 = handsList[0];
+            const h1 = handsList[1];
+            const h0Thumb = checkIsThumbsUp(h0.features, h0.smoothedLm);
+            const h1Thumb = checkIsThumbsUp(h1.features, h1.smoothedLm);
+            const h0Flat = checkIsFlatSupport(h0.features, h0.smoothedLm);
+            const h1Flat = checkIsFlatSupport(h1.features, h1.smoothedLm);
+
+            // 1. Classic ASL HELP: One hand is upright Thumbs-Up fist, other hand is Flat Support Palm
+            if ((h0Thumb && h1Flat) || (h1Thumb && h0Flat)) {
+                let score = 0.98;
+                const thumbHand = h0Thumb ? h0 : h1;
+                const flatHand = h0Thumb ? h1 : h0;
+                // Thumbs up fist positioned above or resting on support palm (smaller Y is higher up)
+                if (thumbHand.smoothedLm[0].y <= flatHand.smoothedLm[0].y + 0.22) {
+                    score += 0.01;
+                }
+                addCandidate("HELP", "Emergency", "fa-hand-holding-medical", Math.min(0.99, score));
+            }
+            // 2. Dual Thumbs-Up with two hands (emergency distress signal)
+            else if (h0Thumb && h1Thumb) {
+                addCandidate("HELP", "Emergency", "fa-hand-holding-medical", 0.97);
+            }
+            // 3. Two hands detected, one is clearly Thumbs-Up and other is supporting
+            else if (h0Thumb || h1Thumb) {
+                const other = h0Thumb ? h1 : h0;
+                const isConflict = other.features.isIndexExt && other.features.extendedCount <= 2 && !other.features.allFingersTogether;
+                if (!isConflict) {
+                    addCandidate("HELP", "Emergency", "fa-hand-holding-medical", 0.95);
+                }
             }
         }
 
@@ -2020,7 +2110,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentSignName.classList.remove('empty-state');
         if (currentSignDesc) {
             const stabText = recognized.stabilityRatio !== undefined ? ` • Stability: ${recognized.stabilityRatio}%` : '';
-            currentSignDesc.textContent = `Category: ${recognized.category} • Match: ${recognized.confidence}%${stabText}`;
+            const twoHandBadge = recognized.name === "HELP" ? " • 2-Hand ASL Gesture" : "";
+            currentSignDesc.textContent = `Category: ${recognized.category}${twoHandBadge} • Match: ${recognized.confidence}%${stabText}`;
         }
         if (signIconDisplay) signIconDisplay.innerHTML = `<i class="fa-solid ${recognized.icon}"></i>`;
 

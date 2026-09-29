@@ -89,6 +89,254 @@
       "confidence_score": 99,
       "output_mode": "both",
       "translated_at": "2026-09-26T04:52:01.634Z"
+    },
+    {
+      "history_id": 10,
+      "user_id": 1,
+      "sign_name": "HI / HELLO",
+      "confidence_score": 98,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:10:15.623Z"
+    },
+    {
+      "history_id": 11,
+      "user_id": 1,
+      "sign_name": "POINT / ONE",
+      "confidence_score": 97,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:10:29.403Z"
+    },
+    {
+      "history_id": 12,
+      "user_id": 1,
+      "sign_name": "HI / HELLO",
+      "confidence_score": 98,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:10:30.965Z"
+    },
+    {
+      "history_id": 13,
+      "user_id": 1,
+      "sign_name": "THUMBS UP",
+      "confidence_score": 98,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:10:48.008Z"
+    },
+    {
+      "history_id": 14,
+      "user_id": 1,
+      "sign_name": "POINT / ONE",
+      "confidence_score": 97,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:10:52.153Z"
+    },
+    {
+      "history_id": 15,
+      "user_id": 1,
+      "sign_name": "PEACE / VICTORY / V",
+      "confidence_score": 97,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:10:55.929Z"
+    },
+    {
+      "history_id": 16,
+      "user_id": 1,
+      "sign_name": "WATER / ALPHABET W",
+      "confidence_score": 97,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:11:00.349Z"
+    },
+    {
+      "history_id": 17,
+      "user_id": 1,
+      "sign_name": "HI / HELLO",
+      "confidence_score": 97,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:11:03.963Z"
+    },
+    {
+      "history_id": 18,
+      "user_id": 1,
+      "sign_name": "FOUR",
+      "confidence_score": 92,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:11:04.649Z"
+    },
+    {
+      "history_id": 19,
+      "user_id": 1,
+      "sign_name": "THUMBS UP",
+      "confidence_score": 98,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:11:14.488Z"
+    },
+    {
+      "history_id": 20,
+      "user_id": 1,
+      "sign_name": "OK SIGN / F",
+      "confidence_score": 94,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:11:27.858Z"
+    },
+    {
+      "history_id": 21,
+      "user_id": 1,
+      "sign_name": "I LOVE YOU",
+      "confidence_score": 98,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:11:31.077Z"
+    },
+    {
+      "history_id": 22,
+      "user_id": 1,
+      "sign_name": "ROCK / METAL",
+      "confidence_score": 97,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:11:38.241Z"
+    },
+    {
+      "history_id": 23,
+      "user_id": 1,
+      "sign_name": "POINT / ONE",
+      "confidence_score": 97,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:11:45.205Z"
+    },
+    {
+      "history_id": 24,
+      "user_id": 1,
+      "sign_name": "PEACE / VICTORY / V",
+      "confidence_score": 97,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:11:50.597Z"
+    },
+    {
+      "history_id": 25,
+      "user_id": 1,
+      "sign_name": "FOUR",
+      "confidence_score": 95,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:12:06.427Z"
+    },
+    {
+      "history_id": 26,
+      "user_id": 1,
+      "sign_name": "HI / HELLO",
+      "confidence_score": 98,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:12:08.930Z"
+    },
+    {
+      "history_id": 27,
+      "user_id": 1,
+      "sign_name": "THUMBS UP",
+      "confidence_score": 98,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:12:25.813Z"
+    },
+    {
+      "history_id": 28,
+      "user_id": 1,
+      "sign_name": "HI / HELLO",
+      "confidence_score": 98,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:20:03.240Z"
+    },
+    {
+      "history_id": 29,
+      "user_id": 1,
+      "sign_name": "HELP",
+      "confidence_score": 98,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:20:05.796Z"
+    },
+    {
+      "history_id": 30,
+      "user_id": 1,
+      "sign_name": "THUMBS UP",
+      "confidence_score": 98,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:20:17.043Z"
+    },
+    {
+      "history_id": 31,
+      "user_id": 1,
+      "sign_name": "HI / HELLO",
+      "confidence_score": 96,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:20:21.494Z"
+    },
+    {
+      "history_id": 32,
+      "user_id": 1,
+      "sign_name": "HI / HELLO",
+      "confidence_score": 96,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:20:32.061Z"
+    },
+    {
+      "history_id": 33,
+      "user_id": 1,
+      "sign_name": "OK SIGN / F",
+      "confidence_score": 94,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:20:32.822Z"
+    },
+    {
+      "history_id": 34,
+      "user_id": 1,
+      "sign_name": "PEACE / VICTORY / V",
+      "confidence_score": 97,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:20:35.760Z"
+    },
+    {
+      "history_id": 35,
+      "user_id": 1,
+      "sign_name": "WATER / ALPHABET W",
+      "confidence_score": 97,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:20:39.452Z"
+    },
+    {
+      "history_id": 36,
+      "user_id": 1,
+      "sign_name": "FOUR",
+      "confidence_score": 92,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:20:43.223Z"
+    },
+    {
+      "history_id": 37,
+      "user_id": 1,
+      "sign_name": "STOP / FIST",
+      "confidence_score": 88,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:20:47.897Z"
+    },
+    {
+      "history_id": 38,
+      "user_id": 1,
+      "sign_name": "HI / HELLO",
+      "confidence_score": 94,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:21:00.260Z"
+    },
+    {
+      "history_id": 39,
+      "user_id": 1,
+      "sign_name": "I LOVE YOU",
+      "confidence_score": 98,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:21:01.124Z"
+    },
+    {
+      "history_id": 40,
+      "user_id": 1,
+      "sign_name": "ROCK / METAL",
+      "confidence_score": 97,
+      "output_mode": "both",
+      "translated_at": "2026-09-29T15:21:04.307Z"
     }
   ],
   "feedback": []

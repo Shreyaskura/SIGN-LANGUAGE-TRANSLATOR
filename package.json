@@ -1,0 +1,20 @@
+{
+  "name": "sign-language-translator",
+  "version": "1.0.0",
+  "description": "Sign Language Translator Web App & API Service with Real-Time MediaPipe Hand Tracking",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "sign-language",
+    "mediapipe",
+    "threejs",
+    "dbs-project"
+  ],
+  "author": "Shreyas",
+  "license": "ISC"
+}

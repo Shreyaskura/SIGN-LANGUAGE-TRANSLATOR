@@ -21,4 +21,5 @@ Thumbs.db
 _*
 *.bak
 *.bak.js
+*.tmp.*
 

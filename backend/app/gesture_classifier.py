@@ -3,13 +3,16 @@ import math
 def calculate_distance_2d(p1, p2):
     return math.sqrt((p1['x'] - p2['x']) ** 2 + (p1['y'] - p2['y']) ** 2)
 
-def classify_landmarks(landmarks):
+def classify_landmarks(landmarks, num_hands=1):
     """
-    Classifies 21 MediaPipe hand landmark keypoints into recognized sign language gesture.
+    Classifies MediaPipe hand landmark keypoints into recognized sign language gesture.
     landmarks: list of dicts [{'id': 0, 'x': ..., 'y': ..., 'z': ...}, ...]
     """
     if not landmarks or len(landmarks) < 21:
         return {"sign_name": "UNKNOWN", "confidence": 0.0, "category": "None"}
+
+    if len(landmarks) >= 42:
+        num_hands = max(num_hands, 2)
 
     lm = {item.get('id', idx): item for idx, item in enumerate(landmarks)}
     wrist = lm[0]
@@ -38,8 +41,10 @@ def classify_landmarks(landmarks):
         else:
             return {"sign_name": "ROCK / METAL", "confidence": 96.0, "category": "Common"}
 
-    # 2. THUMBS UP vs HELP
+    # 2. THUMBS UP vs HELP (HELP is 2-handed ASL sign, THUMBS UP is single hand)
     if extended_count == 0 and is_thumb_up:
+        if num_hands >= 2:
+            return {"sign_name": "HELP", "confidence": 99.0, "category": "Emergency"}
         return {"sign_name": "THUMBS UP", "confidence": 99.0, "category": "Common"}
 
     # 3. ALPHABET L (Thumb & Index at ~90 degrees, others folded)
